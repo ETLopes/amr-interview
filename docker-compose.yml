@@ -1,0 +1,92 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: amora_postgres
+    environment:
+      POSTGRES_DB: amora_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - amora_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d amora_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # FastAPI Backend
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: amora_backend
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/amora_db
+      - SECRET_KEY=amora-secret-key-change-in-production
+      - CORS_ORIGINS=http://localhost:3000,http://localhost:3001
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - amora_network
+    volumes:
+      - ./backend:/app
+    command: >
+      sh -c "alembic upgrade head &&
+              uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # React Frontend (will be added later)
+  # frontend:
+  #   build: ./frontend
+  #   container_name: amora_frontend
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - backend
+  #   networks:
+  #     - amora_network
+  #   volumes:
+  #     - ./frontend:/app
+  #     - /app/node_modules
+  #   environment:
+  #     - REACT_APP_API_URL=http://localhost:8000
+
+  # pgAdmin (optional - for database management)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: amora_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@amora.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - amora_network
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+
+networks:
+  amora_network:
+    driver: bridge
