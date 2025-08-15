@@ -1,18 +1,21 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, EmailStr
 from typing import Optional, List
 from datetime import datetime
 
 # User schemas
 class UserBase(BaseModel):
-    username: str = Field(..., min_length=3, max_length=50)
-    email: str = Field(..., pattern=r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
+    email: EmailStr
+    name: Optional[str] = None
 
 class UserCreate(UserBase):
     password: str = Field(..., min_length=6)
 
 class UserLogin(BaseModel):
-    username: str
+    email: EmailStr
     password: str
+
+class UserUpdate(BaseModel):
+    name: Optional[str] = None
 
 class User(UserBase):
     id: int
@@ -61,7 +64,7 @@ class Token(BaseModel):
     token_type: str
 
 class TokenData(BaseModel):
-    username: Optional[str] = None
+    email: Optional[str] = None
 
 # Response schemas
 class SimulationResponse(BaseModel):

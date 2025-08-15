@@ -15,8 +15,8 @@ class UserCRUD:
         try:
             hashed_password = get_password_hash(user.password)
             db_user = models.User(
-                username=user.username,
                 email=user.email,
+                name=user.name,
                 hashed_password=hashed_password
             )
             db.add(db_user)
@@ -27,15 +27,8 @@ class UserCRUD:
             db.rollback()
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Username or email already registered"
+                detail="Email already registered"
             )
-    
-    @staticmethod
-    def get_user_by_username(db: Session, username: str):
-        """
-        Get user by username
-        """
-        return db.query(models.User).filter(models.User.username == username).first()
     
     @staticmethod
     def get_user_by_email(db: Session, email: str):
@@ -59,7 +52,7 @@ class UserCRUD:
         return db.query(models.User).offset(skip).limit(limit).all()
     
     @staticmethod
-    def update_user(db: Session, user_id: int, user_update: dict):
+    def update_user(db: Session, user_id: int, user_update: schemas.UserUpdate):
         """
         Update user information
         """
@@ -70,7 +63,8 @@ class UserCRUD:
                 detail="User not found"
             )
         
-        for field, value in user_update.items():
+        update_data = user_update.dict(exclude_unset=True)
+        for field, value in update_data.items():
             if hasattr(db_user, field):
                 setattr(db_user, field, value)
         

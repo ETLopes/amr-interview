@@ -45,13 +45,6 @@ async def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
     """
     Register a new user
     """
-    # Check if username already exists
-    if UserCRUD.get_user_by_username(db, user.username):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Username already registered"
-        )
-    
     # Check if email already exists
     if UserCRUD.get_user_by_email(db, user.email):
         raise HTTPException(
@@ -73,13 +66,13 @@ async def login_for_access_token(
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
+            detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
     
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
+        data={"sub": user.email}, expires_delta=access_token_expires
     )
     
     return {"access_token": access_token, "token_type": "bearer"}
@@ -91,6 +84,17 @@ async def read_users_me(current_user: models.User = Depends(get_current_active_u
     Get current user information
     """
     return current_user
+
+@app.patch("/users/me", response_model=schemas.User)
+async def update_user_me(
+    user_update: schemas.UserUpdate,
+    current_user: models.User = Depends(get_current_active_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Update current user information
+    """
+    return UserCRUD.update_user(db, current_user.id, user_update)
 
 # Simulation endpoints
 @app.post("/simulations", response_model=schemas.Simulation)

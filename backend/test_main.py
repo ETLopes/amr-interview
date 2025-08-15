@@ -19,7 +19,7 @@ def test_health_check():
 
 def test_calculate_simulation():
     """Test calculation endpoint without authentication"""
-    response = client.post("/calculate", params={
+    response = client.post("/calculate", json={
         "property_value": 500000,
         "down_payment_percentage": 20,
         "contract_years": 30
@@ -40,62 +40,82 @@ def test_calculate_simulation():
 def test_calculate_invalid_inputs():
     """Test calculation endpoint with invalid inputs"""
     # Invalid property value
-    response = client.post("/calculate", params={
+    response = client.post("/calculate", json={
         "property_value": -100,
         "down_payment_percentage": 20,
         "contract_years": 30
     })
-    assert response.status_code == 400
+    assert response.status_code == 422
     
     # Invalid down payment percentage
-    response = client.post("/calculate", params={
+    response = client.post("/calculate", json={
         "property_value": 500000,
         "down_payment_percentage": 150,
         "contract_years": 30
     })
-    assert response.status_code == 400
+    assert response.status_code == 422
     
     # Invalid contract years
-    response = client.post("/calculate", params={
+    response = client.post("/calculate", json={
         "property_value": 500000,
         "down_payment_percentage": 20,
         "contract_years": 50
     })
-    assert response.status_code == 400
+    assert response.status_code == 422
 
 @patch('main.UserCRUD.create_user')
 def test_register_user(mock_create_user):
     """Test user registration"""
     mock_user = MagicMock()
     mock_user.id = 1
-    mock_user.username = "testuser"
     mock_user.email = "test@example.com"
+    mock_user.name = None
     mock_user.created_at = "2024-01-01T00:00:00"
     mock_user.updated_at = None
     mock_create_user.return_value = mock_user
     
     response = client.post("/register", json={
-        "username": "testuser",
         "email": "test@example.com",
         "password": "password123"
     })
     
     assert response.status_code == 200
     data = response.json()
-    assert data["username"] == "testuser"
     assert data["email"] == "test@example.com"
+    assert data["name"] is None
+
+@patch('main.UserCRUD.create_user')
+def test_register_user_with_name(mock_create_user):
+    """Test user registration with name"""
+    mock_user = MagicMock()
+    mock_user.id = 1
+    mock_user.email = "test@example.com"
+    mock_user.name = "John Doe"
+    mock_user.created_at = "2024-01-01T00:00:00"
+    mock_user.updated_at = None
+    mock_create_user.return_value = mock_user
+    
+    response = client.post("/register", json={
+        "email": "test@example.com",
+        "name": "John Doe",
+        "password": "password123"
+    })
+    
+    assert response.status_code == 200
+    data = response.json()
+    assert data["email"] == "test@example.com"
+    assert data["name"] == "John Doe"
 
 def test_register_invalid_data():
     """Test user registration with invalid data"""
     # Missing required fields
     response = client.post("/register", json={
-        "username": "test"
+        "email": "test@example.com"
     })
     assert response.status_code == 422
     
     # Invalid email format
     response = client.post("/register", json={
-        "username": "testuser",
         "email": "invalid-email",
         "password": "password123"
     })
@@ -103,7 +123,6 @@ def test_register_invalid_data():
     
     # Password too short
     response = client.post("/register", json={
-        "username": "testuser",
         "email": "test@example.com",
         "password": "123"
     })
