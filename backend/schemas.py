@@ -2,28 +2,34 @@ from pydantic import BaseModel, Field, EmailStr
 from typing import Optional, List
 from datetime import datetime
 
+
 # User schemas
 class UserBase(BaseModel):
     email: EmailStr
     name: Optional[str] = None
 
+
 class UserCreate(UserBase):
     password: str = Field(..., min_length=6)
+
 
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
 
+
 class UserUpdate(BaseModel):
     name: Optional[str] = None
+
 
 class User(UserBase):
     id: int
     created_at: datetime
     updated_at: Optional[datetime] = None
-    
+
     class Config:
         from_attributes = True
+
 
 # Simulation schemas
 class SimulationBase(BaseModel):
@@ -34,8 +40,10 @@ class SimulationBase(BaseModel):
     property_type: Optional[str] = None
     notes: Optional[str] = None
 
+
 class SimulationCreate(SimulationBase):
     pass
+
 
 class SimulationUpdate(BaseModel):
     property_value: Optional[float] = Field(None, gt=0)
@@ -44,6 +52,7 @@ class SimulationUpdate(BaseModel):
     property_address: Optional[str] = None
     property_type: Optional[str] = None
     notes: Optional[str] = None
+
 
 class Simulation(SimulationBase):
     id: int
@@ -54,26 +63,31 @@ class Simulation(SimulationBase):
     monthly_savings: float
     created_at: datetime
     updated_at: Optional[datetime] = None
-    
+
     class Config:
         from_attributes = True
+
 
 # Token schemas
 class Token(BaseModel):
     access_token: str
     token_type: str
 
+
 class TokenData(BaseModel):
     email: Optional[str] = None
+
 
 # Response schemas
 class SimulationResponse(BaseModel):
     simulation: Simulation
     message: str
 
+
 class SimulationsListResponse(BaseModel):
     simulations: List[Simulation]
     total: int
+
 
 class UserSimulationsResponse(BaseModel):
     user: User
