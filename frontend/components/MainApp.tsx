@@ -15,9 +15,7 @@ import {
   LogOut,
   User,
   ArrowLeft,
-  Settings,
   WifiOff,
-  Wifi
 } from 'lucide-react';
 
 type View = 'dashboard' | 'simulations' | 'new-simulation' | 'edit-simulation';

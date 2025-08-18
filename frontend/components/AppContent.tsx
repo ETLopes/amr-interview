@@ -4,7 +4,6 @@ import React, { useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { LoginForm } from './LoginForm';
 import { MainApp } from './MainApp';
-import { setGlobalApiConfig } from '../config/api';
 
 export function AppContent() {
   const { user, isLoading } = useAuth();

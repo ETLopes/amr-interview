@@ -4,14 +4,13 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import { Alert, AlertDescription } from './ui/alert';
 import { useAuth, Simulation } from '../contexts/AuthContext';
-import { 
-  Edit3, 
-  Trash2, 
-  Calendar, 
-  DollarSign, 
-  Home, 
+import {
+  Edit3,
+  Trash2,
+  Calendar,
+  DollarSign,
+  Home,
   TrendingUp,
   Plus,
   AlertCircle
@@ -117,7 +116,7 @@ export function SimulationList({ onCreateNew, onEdit }: SimulationListProps) {
                 </Badge>
               </div>
             </CardHeader>
-            
+
             <CardContent className="space-y-4">
               {/* Main Values */}
               <div className="grid grid-cols-2 gap-4">
@@ -183,11 +182,11 @@ export function SimulationList({ onCreateNew, onEdit }: SimulationListProps) {
                   <Edit3 className="mr-2 h-3 w-3" />
                   Editar
                 </Button>
-                
+
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       size="sm"
                       className="text-destructive hover:text-destructive"
                       disabled={deletingId === simulation.id}
@@ -202,7 +201,7 @@ export function SimulationList({ onCreateNew, onEdit }: SimulationListProps) {
                         Excluir Simulação
                       </AlertDialogTitle>
                       <AlertDialogDescription>
-                        Tem certeza que deseja excluir a simulação "{simulation.nome}"? 
+                        Tem certeza que deseja excluir a simulação &quot;{simulation.nome}&quot;?
                         Esta ação não pode ser desfeita.
                       </AlertDialogDescription>
                     </AlertDialogHeader>

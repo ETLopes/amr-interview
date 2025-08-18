@@ -2,8 +2,8 @@
 
 import React, { useEffect, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useAuth } from '../../../../contexts/AuthContext';
-import { SimulationForm } from '../../../../components/SimulationForm';
+import { useAuth } from '@/contexts/AuthContext';
+import { SimulationForm } from '@/components/SimulationForm';
 
 export default function EditSimulationPage() {
   const params = useParams<{ id: string }>();

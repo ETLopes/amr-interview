@@ -2,8 +2,8 @@
 
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '../../../contexts/AuthContext';
-import { SimulationForm } from '../../../components/SimulationForm';
+import { useAuth } from '@/contexts/AuthContext';
+import { SimulationForm } from '@/components/SimulationForm';
 
 export default function NewSimulationPage() {
   const { user, isLoading } = useAuth();

@@ -10,14 +10,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Alert, AlertDescription } from './ui/alert';
 import { useAuth } from '../contexts/AuthContext';
 import { Simulation, SimulationCreate } from '../services/api';
-import { 
-  Home, 
-  DollarSign, 
-  Percent, 
-  Calendar, 
+import {
+  Home,
+  DollarSign,
+  Percent,
+  Calendar,
   Calculator,
   MapPin,
-  Building,
   FileText,
   AlertCircle,
   CheckCircle2,
@@ -34,7 +33,7 @@ export function SimulationForm({ simulation: editingSimulation, onSuccess, onCan
   const { addSimulation, updateSimulation } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
-  
+
   const [formData, setFormData] = useState<SimulationCreate>({
     nome: '',
     valorImovel: 0,
@@ -144,7 +143,7 @@ export function SimulationForm({ simulation: editingSimulation, onSuccess, onCan
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -180,7 +179,7 @@ export function SimulationForm({ simulation: editingSimulation, onSuccess, onCan
             {editingSimulation ? 'Editar Simulação' : 'Nova Simulação'}
           </h1>
           <p className="text-muted-foreground">
-            {editingSimulation 
+            {editingSimulation
               ? 'Atualize os dados da sua simulação'
               : 'Simule a compra do seu imóvel dos sonhos'
             }
@@ -209,7 +208,7 @@ export function SimulationForm({ simulation: editingSimulation, onSuccess, onCan
                     <Home className="h-4 w-4" />
                     Informações Básicas
                   </h3>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="nome">Nome da Simulação</Label>
@@ -263,7 +262,7 @@ export function SimulationForm({ simulation: editingSimulation, onSuccess, onCan
                     <DollarSign className="h-4 w-4" />
                     Valores Financeiros
                   </h3>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="valorImovel">Valor do Imóvel (R$)</Label>
@@ -329,7 +328,7 @@ export function SimulationForm({ simulation: editingSimulation, onSuccess, onCan
                     <FileText className="h-4 w-4" />
                     Observações
                   </h3>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="observacoes">Observações Adicionais</Label>
                     <Textarea

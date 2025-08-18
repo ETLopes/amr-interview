@@ -9,16 +9,15 @@ import { Badge } from './ui/badge';
 import { Alert, AlertDescription } from './ui/alert';
 import { useAuth } from '../contexts/AuthContext';
 import { SimulationCreate } from '../services/api';
-import { 
-  Download, 
-  Link as LinkIcon, 
-  Loader2, 
+import {
+  Download,
+  Link as LinkIcon,
+  Loader2,
   CheckCircle2,
   AlertCircle,
   Home,
   MapPin,
   DollarSign,
-  Hash,
   Info
 } from 'lucide-react';
 import {
@@ -58,7 +57,7 @@ export function PropertyImporter() {
   const extractPropertyData = async (url: string): Promise<PropertyData> => {
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 2000));
-    
+
     // Mock data based on different portal patterns
     const mockProperties: PropertyData[] = [
       {
@@ -95,7 +94,7 @@ export function PropertyImporter() {
         propertyType: 'Cobertura'
       }
     ];
-    
+
     // Return random mock property
     return mockProperties[Math.floor(Math.random() * mockProperties.length)];
   };
@@ -114,7 +113,7 @@ export function PropertyImporter() {
 
     setIsLoading(true);
     setError('');
-    
+
     try {
       const propertyData = await extractPropertyData(url);
       setImportedProperty(propertyData);
@@ -167,7 +166,7 @@ export function PropertyImporter() {
           </Badge>
         </Button>
       </DialogTrigger>
-      
+
       <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader className="space-y-3">
           <DialogTitle className="flex items-center gap-3">
@@ -208,8 +207,8 @@ export function PropertyImporter() {
                   disabled={isLoading}
                 />
               </div>
-              <Button 
-                onClick={handleImport} 
+              <Button
+                onClick={handleImport}
                 disabled={isLoading || !url.trim()}
                 className="sm:w-auto w-full"
               >
@@ -335,8 +334,8 @@ export function PropertyImporter() {
                 </div>
 
                 {/* Action Button */}
-                <Button 
-                  onClick={handleCreateSimulation} 
+                <Button
+                  onClick={handleCreateSimulation}
                   className="w-full bg-green-600 hover:bg-green-700 h-12"
                 >
                   <CheckCircle2 className="mr-2 h-4 w-4" />
@@ -355,7 +354,7 @@ export function PropertyImporter() {
             <div className="text-xs text-muted-foreground space-y-1 pl-6">
               <p>1. Acesse o anúncio do imóvel em um dos portais suportados</p>
               <p>2. Copie a URL da página do anúncio</p>
-              <p>3. Cole aqui e clique em "Importar"</p>
+              <p>3. Cole aqui e clique em &quot;Importar&quot;</p>
               <p>4. Os dados serão extraídos automaticamente para sua simulação</p>
             </div>
           </div>
