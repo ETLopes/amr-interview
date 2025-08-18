@@ -1,348 +1,328 @@
-# aMORA Real Estate Simulator
+# Simulador Imobiliário aMORA
 
-A comprehensive full-stack application for simulating real estate purchases with mortgage calculations, built with modern technologies and best practices.
+Uma aplicação full-stack completa para simular compras de imóveis com cálculos de financiamento, construída com tecnologias modernas e boas práticas.
 
-## 🏗️ Project Overview
+## 🏗️ Visão Geral do Projeto
 
-The aMORA Real Estate Simulator is a strategic tool designed to help users understand the financial implications of purchasing real estate. It provides detailed calculations for down payments, financing amounts, and savings requirements, helping users make informed decisions about their real estate investments.
+O Simulador Imobiliário aMORA é uma ferramenta estratégica projetada para ajudar usuários a entender as implicações financeiras da compra de um imóvel. Ele fornece cálculos detalhados de entrada, valor a financiar e necessidades de poupança, auxiliando decisões informadas sobre investimentos imobiliários.
 
-## 🚀 Features
+## 🚀 Recursos
 
-### Core Functionality
-- **Mortgage Calculations**: Automatic computation of all financial aspects
-- **User Management**: Secure authentication and user profiles
-- **Simulation History**: Track and manage all previous simulations
-- **Real-time Updates**: Instant calculations with live form updates
-- **Responsive Design**: Mobile-first approach for all devices
+### Funcionalidade Principal
+- **Cálculos de Financiamento**: Cálculo automático de todos os aspectos financeiros
+- **Gestão de Usuários**: Autenticação segura e perfis de usuário
+- **Histórico de Simulações**: Acompanhe e gerencie simulações anteriores
+- **Atualizações em Tempo Real**: Cálculos instantâneos com atualização dinâmica do formulário
+- **Design Responsivo**: Abordagem mobile-first para todos os dispositivos
 
-### Business Intelligence
-- **User Analytics**: Track engagement and usage patterns
-- **Simulation Statistics**: Aggregate data for business insights
-- **Export Capabilities**: Download simulation reports
-- **Performance Metrics**: Monitor system usage and user behavior
+### Inteligência de Negócios
+- **Analytics de Usuário**: Acompanhe engajamento e padrões de uso
+- **Estatísticas de Simulação**: Dados agregados para insights de negócio
+- **Exportação**: Download de relatórios de simulação
+- **Métricas de Performance**: Monitore uso do sistema e comportamento do usuário
 
-## 🛠️ Technology Stack
+## 🛠️ Pilha de Tecnologia
 
 ### Backend
 - **Framework**: FastAPI (Python)
-- **Database**: PostgreSQL with SQLAlchemy ORM
-- **Authentication**: JWT with secure password hashing
-- **Migrations**: Alembic for database schema management
-- **Testing**: Pytest with comprehensive test coverage
+- **Banco de Dados**: PostgreSQL com SQLAlchemy ORM
+- **Autenticação**: JWT com hash de senha seguro
+- **Migrações**: Alembic para gerenciamento de esquema
+- **Testes**: Pytest com cobertura abrangente
 
-### Frontend (Coming Soon)
+### Frontend (Em breve)
 - **Framework**: React/Next.js
-- **Styling**: Modern CSS with responsive design
-- **State Management**: React hooks and context
-- **UI Components**: Custom component library
+- **Estilização**: CSS moderno com design responsivo
+- **Gerenciamento de Estado**: Hooks e Context API
+- **Componentes de UI**: Biblioteca de componentes customizada
 
-### Infrastructure
-- **Containerization**: Docker & Docker Compose
-- **Database**: PostgreSQL 15 with persistent storage
-- **Development**: Hot reload and development tools
-- **Production Ready**: Scalable architecture design
+### Infraestrutura
+- **Containerização**: Docker & Docker Compose
+- **Banco de Dados**: PostgreSQL 15 com armazenamento persistente
+- **Desenvolvimento**: Hot reload e ferramentas de desenvolvimento
+- **Pronto para Produção**: Arquitetura escalável
 
-## 📊 Business Analysis & Strategic Decisions
+## 📊 Análise de Negócios e Decisões Estratégicas
 
-### Technical Architecture Decisions
+### Decisões de Arquitetura Técnica
 
-#### 1. FastAPI Backend Selection
-**Decision**: Chose FastAPI over Node.js for the backend
-**Rationale**: 
-- Superior performance and automatic API documentation
-- Native async/await support for better scalability
-- Built-in data validation with Pydantic
-- Excellent developer experience and rapid development
-- Strong typing system reduces runtime errors
+#### 1. Seleção do Backend FastAPI
+**Decisão**: Escolhido FastAPI em vez de Node.js para o backend
+**Justificativa**:
+- Apesar de ter mais experiência com Node.js, achei importante tentar implement usando FastAPI já que é a stack da empresa
 
-#### 2. PostgreSQL Database
-**Decision**: Selected PostgreSQL as the primary database
-**Rationale**:
-- ACID compliance for financial calculations
-- Advanced JSON support for flexible data storage
-- Excellent performance for complex queries
-- Strong community and enterprise support
-- Built-in full-text search capabilities
+#### 2. Banco de Dados PostgreSQL
+**Decisão**: Selecionado PostgreSQL como banco primário
+**Justificativa**:
+- Conformidade ACID para cálculos financeiros
+- Ótimo desempenho para consultas complexas
+- Comunidade forte e suporte corporativo
 
-#### 3. JWT Authentication
-**Decision**: Implemented JWT-based authentication
-**Rationale**:
-- Stateless authentication for better scalability
-- Secure token-based sessions
-- Easy integration with frontend frameworks
-- Industry standard for modern web applications
+#### 3. Autenticação JWT
+**Decisão**: Implementada autenticação baseada em JWT
+**Justificativa**:
+- Autenticação stateless para melhor escalabilidade
+- Sessões seguras baseadas em token
+- Integração simples com frameworks frontend
+- Padrão de mercado para aplicações web modernas
 
-### Business Feature Recommendations
 
-#### 1. Credit Eligibility Scoring
-**Feature**: Implement an automated credit scoring system
-**Business Value**:
-- Increase user engagement by providing immediate feedback
-- Reduce time-to-decision for mortgage applications
-- Improve conversion rates from simulation to actual mortgage
-- Generate qualified leads for mortgage brokers
+## 🚀 Início Rápido
 
-**Implementation**: 
-- Integrate with credit bureau APIs (Equifax, TransUnion)
-- Use machine learning models for score prediction
-- Provide personalized recommendations based on credit profile
-
-#### 2. Real Estate Portal Integration
-**Feature**: Connect with property listing platforms
-**Business Value**:
-- Compare simulations with actual market offerings
-- Provide real-time property valuations
-- Increase user retention through market insights
-- Generate affiliate revenue from property referrals
-
-**Implementation**:
-- API integrations with Zillow, Realtor.com, Redfin
-- Automated property data import
-- Market trend analysis and reporting
-
-#### 3. Advanced Analytics Dashboard
-**Feature**: Comprehensive user analytics and reporting
-**Business Value**:
-- Understand user behavior and preferences
-- Identify market trends and opportunities
-- Optimize conversion funnels
-- Provide insights for business strategy
-
-**Implementation**:
-- User engagement tracking (time on site, simulations created)
-- Conversion funnel analysis
-- A/B testing framework
-- Custom reporting engine
-
-#### 4. Export and Reporting System
-**Feature**: PDF/Excel export of simulation reports
-**Business Value**:
-- Professional presentation for mortgage applications
-- User retention through valuable document generation
-- Potential premium feature for advanced users
-- Integration with financial planning tools
-
-**Implementation**:
-- PDF generation with professional templates
-- Excel export with formulas and charts
-- Email delivery system
-- Cloud storage integration
-
-### Success Metrics & KPIs
-
-#### 1. User Engagement Metrics
-- **Time on Site**: Target: 5+ minutes per session
-- **Simulations per User**: Target: 3+ simulations per user
-- **Return User Rate**: Target: 40% monthly return rate
-- **Feature Adoption**: Target: 70% of users try advanced features
-
-#### 2. Business Conversion Metrics
-- **Simulation to Application Rate**: Target: 15% conversion
-- **Lead Generation**: Target: 100+ qualified leads per month
-- **User Retention**: Target: 60% 30-day retention
-- **Revenue per User**: Target: $50+ average revenue per user
-
-#### 3. Technical Performance Metrics
-- **API Response Time**: Target: <200ms average response time
-- **System Uptime**: Target: 99.9% availability
-- **Error Rate**: Target: <0.1% error rate
-- **User Satisfaction**: Target: 4.5+ star rating
-
-## 🚀 Quick Start
-
-### Prerequisites
+### Pré-requisitos
 - Docker & Docker Compose
 - Git
 
-### 1. Clone the Repository
+### 1. Clonar o Repositório
 ```bash
 git clone <repository-url>
 cd amora
 ```
 
-### 2. Start All Services
+### 2. Iniciar Todos os Serviços
 ```bash
 docker-compose up -d
 ```
 
-### 3. Access the Application
-- **Backend API**: http://localhost:8000
-- **API Documentation**: http://localhost:8000/docs
-- **Database Admin**: http://localhost:5050 (pgAdmin)
-- **Frontend**: Coming Soon
+### 3. Acessar a Aplicação
+- **API Backend**: http://localhost:8000
+- **Documentação da API**: http://localhost:8000/docs
+- **Admin do Banco**: http://localhost:5050 (pgAdmin)
+- **Frontend**: Em breve
 
-### 4. Verify Installation
+### 4. Verificar Instalação
 ```bash
-# Check service status
+# Verificar status dos serviços
 docker-compose ps
 
-# View logs
+# Ver logs
 docker-compose logs -f backend
 
-# Test API health
+# Testar health da API
 curl http://localhost:8000/health
 ```
 
-## 📁 Project Structure
+## 📁 Estrutura do Projeto
 
 ```
 amora/
-├── backend/                 # FastAPI backend
-│   ├── alembic/            # Database migrations
-│   ├── models.py           # Database models
-│   ├── schemas.py          # Pydantic schemas
-│   ├── auth.py             # Authentication logic
-│   ├── main.py             # FastAPI application
-│   └── README.md           # Backend documentation
-├── frontend/               # React frontend (coming soon)
-├── docker-compose.yml      # Service orchestration
-├── GUIDELINES.md           # Project requirements
-└── README.md               # This file
+├── backend/                 # Backend FastAPI
+│   ├── alembic/            # Migrações de banco de dados
+│   ├── models.py           # Modelos do banco de dados
+│   ├── schemas.py          # Schemas Pydantic
+│   ├── auth.py             # Lógica de autenticação
+│   ├── main.py             # Aplicação FastAPI
+│   └── README.md           # Documentação do backend
+├── frontend/               # Frontend React (em breve)
+├── docker-compose.yml      # Orquestração dos serviços
+├── GUIDELINES.md           # Requisitos do projeto
+└── README.md               # Este arquivo
 ```
 
-## 🔧 Development
+## 🔧 Desenvolvimento
 
-### Backend Development
+### Desenvolvimento do Backend
 ```bash
 cd backend
 
-# Create virtual environment
+# Criar ambiente virtual
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 
-# Install dependencies
+# Instalar dependências
 pip install -r requirements.txt
 
-# Run migrations
+# Executar migrações
 alembic upgrade head
 
-# Start development server
+# Iniciar servidor de desenvolvimento
 uvicorn main:app --reload
 ```
 
-### Running Tests
+### Executando Testes
 ```bash
 cd backend
 pytest test_main.py -v
 ```
 
-### Database Management
+### Gerenciamento do Banco de Dados
 ```bash
-# Access PostgreSQL
+# Acessar o PostgreSQL
 docker-compose exec postgres psql -U postgres -d amora_db
 
-# Run migrations
+# Executar migrações
 docker-compose exec backend alembic upgrade head
 
-# Create new migration
+# Criar nova migração
 docker-compose exec backend alembic revision --autogenerate -m "Description"
 ```
 
-## 🌐 API Endpoints
+## 🌐 Endpoints da API
 
-### Public Endpoints
-- `GET /` - Welcome message
-- `GET /health` - Health check
-- `POST /register` - User registration
-- `POST /token` - User login
-- `POST /calculate` - Calculate simulation values
+### Endpoints Públicos
+- `GET /` - Mensagem de boas-vindas
+- `GET /health` - Verificação de saúde
+- `POST /register` - Registro de usuário
+- `POST /token` - Login do usuário
+- `POST /calculate` - Cálculo de simulação
 
-### Protected Endpoints
-- `GET /users/me` - Current user info
-- `POST /simulations` - Create simulation
-- `GET /simulations` - List user simulations
-- `GET /simulations/{id}` - Get specific simulation
-- `PUT /simulations/{id}` - Update simulation
-- `DELETE /simulations/{id}` - Delete simulation
-- `GET /simulations/statistics` - User statistics
+### Endpoints Protegidos
+- `GET /users/me` - Informações do usuário atual
+- `POST /simulations` - Criar simulação
+- `GET /simulations` - Listar simulações do usuário
+- `GET /simulations/{id}` - Detalhar simulação
+- `PUT /simulations/{id}` - Atualizar simulação
+- `DELETE /simulations/{id}` - Excluir simulação
+- `GET /simulations/statistics` - Estatísticas do usuário
 
-## 📊 Calculation Formulas
+## 📊 Fórmulas de Cálculo
 
-The simulator implements the exact formulas specified in the requirements:
+O simulador implementa as fórmulas especificadas nos requisitos:
 
-- **Down Payment**: `property_value × (down_payment_percentage ÷ 100)`
-- **Financing Amount**: `property_value - down_payment_amount`
-- **Total to Save**: `property_value × 0.15` (15% for additional costs)
-- **Monthly Savings**: `total_to_save ÷ (contract_years × 12)`
+- **Entrada**: `property_value × (down_payment_percentage ÷ 100)`
+- **Valor a Financiar**: `property_value - down_payment_amount`
+- **Total a Guardar**: `property_value × 0.15` (15% para custos adicionais)
+- **Poupança Mensal**: `total_to_save ÷ (contract_years × 12)`
 
-## 🔒 Security Features
+## 🔒 Recursos de Segurança
 
-- **Password Security**: Bcrypt hashing with salt
-- **JWT Authentication**: Secure token-based sessions
-- **Input Validation**: Comprehensive data validation
-- **SQL Injection Protection**: ORM-based queries
-- **CORS Configuration**: Secure cross-origin requests
+- **Segurança de Senhas**: Hash com Bcrypt e salt
+- **Autenticação JWT**: Sessões seguras baseadas em token
+- **Validação de Entrada**: Validação abrangente de dados
+- **Proteção contra SQL Injection**: Consultas via ORM
+- **Configuração de CORS**: Requisições cross-origin seguras
 
-## 📈 Scalability Considerations
+## 📈 Considerações de Escalabilidade
 
-### Database Scaling
-- **Read Replicas**: Implement PostgreSQL read replicas for heavy read loads
-- **Connection Pooling**: Use PgBouncer for connection management
-- **Sharding**: Horizontal partitioning for large datasets
+### Escala do Banco de Dados
+- **Réplicas de Leitura**: Implementar para cargas intensas de leitura
+- **Pool de Conexões**: Usar PgBouncer
+- **Sharding**: Particionamento horizontal para grandes volumes
 
-### Application Scaling
-- **Load Balancing**: Nginx reverse proxy with multiple backend instances
-- **Caching**: Redis for session storage and API response caching
-- **Microservices**: Break down into domain-specific services
+### Escala da Aplicação
+- **Balanceamento de Carga**: Nginx como proxy reverso com múltiplas instâncias
+- **Cache**: Redis para sessões e cache de respostas
+- **Microsserviços**: Dividir por domínios quando necessário
 
-### Infrastructure Scaling
-- **Container Orchestration**: Kubernetes for production deployment
-- **Auto-scaling**: Cloud-based auto-scaling groups
-- **CDN**: Content delivery network for static assets
+### Escala da Infraestrutura
+- **Orquestração**: Kubernetes para produção
+- **Auto-escalonamento**: Grupos de auto-scale em nuvem
+- **CDN**: Distribuição de conteúdos estáticos
 
-## 🧪 Testing Strategy
+## 🧪 Estratégia de Testes
 
-### Test Coverage
-- **Unit Tests**: Individual function and class testing
-- **Integration Tests**: API endpoint testing
-- **End-to-End Tests**: Complete user workflow testing
-- **Performance Tests**: Load and stress testing
+### Cobertura de Testes
+- **Unitários**: Testes de funções e classes isoladas
+- **Integração**: Testes de endpoints da API
+- **End-to-End**: Fluxos completos do usuário
+- **Performance**: Carga e estresse
 
-### Testing Tools
-- **Pytest**: Python testing framework
-- **FastAPI TestClient**: HTTP client for testing
-- **Coverage.py**: Code coverage analysis
-- **Locust**: Load testing framework
+### Ferramentas de Teste
+- **Pytest**: Framework de testes em Python
+- **FastAPI TestClient**: Cliente HTTP para testes
+- **Coverage.py**: Análise de cobertura
+- **Locust**: Testes de carga
 
-## 🚀 Deployment
+## 🚀 Implantação
 
-### Development Environment
+### Ambiente de Desenvolvimento
 ```bash
 docker-compose up -d
 ```
 
-### Production Environment
+### Ambiente de Produção
 ```bash
-# Build production images
+# Construir imagens de produção
 docker-compose -f docker-compose.prod.yml build
 
-# Deploy with production configuration
+# Subir com configuração de produção
 docker-compose -f docker-compose.prod.yml up -d
 ```
 
-### Environment Variables
-- `DATABASE_URL`: PostgreSQL connection string
-- `SECRET_KEY`: JWT signing key
-- `CORS_ORIGINS`: Allowed CORS origins
-- `LOG_LEVEL`: Application logging level
+### Variáveis de Ambiente
+- `DATABASE_URL`: String de conexão do PostgreSQL
+- `SECRET_KEY`: Chave de assinatura JWT
+- `CORS_ORIGINS`: Origens permitidas no CORS
+- `LOG_LEVEL`: Nível de log da aplicação
 
-## 🤝 Contributing
+## 🤝 Contribuindo
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Ensure all tests pass
-6. Submit a pull request
+1. Faça um fork do repositório
+2. Crie uma branch de feature
+3. Implemente suas alterações
+4. Adicione testes para a nova funcionalidade
+5. Garanta que todos os testes passam
+6. Abra um pull request
 
-## 📝 License
 
-This project is part of the aMORA Real Estate Simulator assessment.
 
-## 📞 Support
+### Recomendações de Funcionalidades de Negócio
 
-For questions or support, please refer to the project documentation or create an issue in the repository.
+#### 1. Pontuação de Elegibilidade de Crédito
+**Recurso**: Implementar um sistema automatizado de score de crédito
+**Valor de Negócio**:
+- Aumenta o engajamento com feedback imediato
+- Reduz o tempo de decisão em solicitações de financiamento
+- Melhora a conversão de simulação para financiamento real
+- Gera leads qualificados para correspondentes/bancos
 
----
+Com um score sendo dado automaticamente para o usuário ele pode já saber se é elegível para o financiamento antes mesmo de solicitar, aumentando a confiança no processo.
 
-**Built with ❤️ for aMORA Real Estate Simulator**
+**Implementação**:
+- Integração com bureaus de crédito (Serasa, SPC Brasil, Quod)
+- Recomendações personalizadas baseadas no perfil
+
+#### 2. Integração com Portais Imobiliários
+**Recurso**: Conectar com plataformas de anúncios de imóveis
+**Valor de Negócio**:
+- Comparar simulações com ofertas reais do mercado
+- Valorações de imóvel em tempo real
+- Aumenta retenção por insights de mercado
+- Gera receita por afiliados
+- Possibilita recomendações de imóveis com base na simulação (Usuários buscando apartamentos com janelas amplas, por exemplo)
+- Aumenta a relevância do simulador para usuários que buscam imóveis
+
+
+**Implementação**:
+- Integrações com APIs (VivaReal, OLX, Zap Imóveis, QuintoAndar)
+- Importação automática de dados de imóveis
+- Análise e relatórios de tendências de mercado
+
+#### 3. Painel de Analytics Avançado
+**Recurso**: Analytics e relatórios abrangentes
+**Valor de Negócio**:
+- Entender comportamento e preferências dos usuários
+- Identificar tendências e oportunidades
+- Otimizar funis de conversão
+- Fornecer insights para estratégia
+- Fornecer indicações de imóveis com base no perfil do usuário
+
+**Implementação**:
+- Acompanhamento de engajamento (tempo no site, simulações criadas)
+- Análise de funil de conversão
+- Framework de testes A/B
+- Mecanismo de relatórios customizados
+
+### Métricas de Sucesso e KPIs
+
+#### 1. Métricas de Engajamento
+- **Tempo no Site**: Meta: 5+ minutos por sessão
+- **Simulações por Usuário**: Meta: 3+ por usuário
+- **Taxa de Retorno**: Meta: X% mensal
+- **Adoção de Recursos**: Meta: 50% usam recursos avançados
+
+#### 2. Métricas de Conversão
+- **Simulação → Solicitação**: Meta: 5% de conversão
+- **Geração de Leads**: Meta: 100+ leads qualificados/mês
+- **Retenção**: Meta: 60% em 30 dias
+- **Receita por Usuário**: Meta: US$ 50+ por usuário
+
+#### 3. Métricas de Desempenho Técnico
+- **Tempo de Resposta da API**: Meta: <200 ms em média
+- **Disponibilidade**: Meta: 99,9%
+- **Taxa de Erros**: Meta: <0,1%
+- **Satisfação do Usuário**: Meta: 4,5+ estrelas
+
+
+**Construído com ❤️ para o Simulador Imobiliário aMORA**
+
