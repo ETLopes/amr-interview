@@ -1,0 +1,13 @@
+{
+    "name": "aMORA - Simulador Imobiliário",
+    "short_name": "aMORA",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#030213",
+    "theme_color": "#030213",
+    "icons": [{
+        "src": "/favicon.ico",
+        "sizes": "any",
+        "type": "image/x-icon"
+    }]
+}
