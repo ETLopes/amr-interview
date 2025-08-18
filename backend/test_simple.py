@@ -16,10 +16,10 @@ def test_imports():
     try:
         # Test imports without storing them
         import main  # noqa: F401
-        import models  # noqa: F401
-        import schemas  # noqa: F401
-        import auth  # noqa: F401
-        import database  # noqa: F401
+        from app import models  # noqa: F401
+        from app import schemas  # noqa: F401
+        from app.core import security  # noqa: F401
+        from app import db  # noqa: F401
 
         print("✅ All modules imported successfully")
         return True
@@ -31,7 +31,7 @@ def test_imports():
 def test_calculation_formulas():
     """Test the calculation formulas"""
     try:
-        from simulation_service import SimulationService
+        from app.services.simulations import SimulationService
 
         # Test calculation with known values
         result = SimulationService.calculate_simulation_values(
