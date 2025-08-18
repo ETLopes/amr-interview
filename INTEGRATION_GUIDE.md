@@ -31,7 +31,7 @@ The aMORA Real Estate Simulator is a full-stack application with a FastAPI backe
 
 ### 2. Frontend (Next.js)
 - **Port**: 3000
-- **Framework**: Next.js 15 with React 19
+- **Framework**: Next.js 14 with React 18
 - **State Management**: React Context + TanStack Query
 - **UI Components**: Radix UI + Tailwind CSS
 - **Authentication**: JWT token management

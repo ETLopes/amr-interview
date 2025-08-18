@@ -9,11 +9,14 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-# Add the parent directory to the Python path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Add the backend/app directory to the Python path
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+APP_DIR = os.path.join(BASE_DIR, 'app')
+if APP_DIR not in sys.path:
+    sys.path.append(APP_DIR)
 
-# Import your models after adding to path
-from models import Base  # noqa: E402
+# Import models Base from the new app structure
+from db import Base  # noqa: E402
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
