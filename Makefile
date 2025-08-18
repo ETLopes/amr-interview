@@ -1,7 +1,7 @@
 # aMORA Real Estate Simulator - Makefile
 # Provides convenient commands for development, testing, and deployment
 
-.PHONY: help build up down restart logs clean test test-backend test-frontend lint format migrate migrate-create migrate-rollback shell-backend shell-db shell-pgadmin install-deps install-backend-deps install-frontend-deps
+.PHONY: help build up down restart logs clean test test-backend test-frontend lint format migrate migrate-create migrate-rollback shell-backend shell-db shell-pgadmin install-deps install-backend-deps install-frontend-deps backend-unit-tests backend-crud-tests backend-sim-tests
 
 # Default target
 help:
@@ -19,9 +19,12 @@ help:
 	@echo "  clean          - Remove all containers, networks, and volumes"
 	@echo ""
 	@echo "Testing:"
-	@echo "  test           - Run all tests (simple + FastAPI tests)"
+	@echo "  test           - Run all tests (simple + API + unit)"
 	@echo "  test-all       - Run all test suites"
-	@echo "  test-backend   - Run all backend tests"
+	@echo "  test-backend   - Run backend tests (simple + API + unit)"
+	@echo "  backend-unit-tests - Run backend unit tests for CRUD and simulations"
+	@echo "  backend-crud-tests - Run only CRUD unit tests"
+	@echo "  backend-sim-tests  - Run only simulations unit tests"
 	@echo "  test-simple    - Run simple backend tests"
 	@echo "  test-main      - Run FastAPI TestClient tests"
 	@echo "  test-frontend  - Run frontend tests (when available)"
@@ -102,10 +105,10 @@ clean:
 test: test-all
 	@echo "All tests completed successfully! 🎉"
 
-test-all: test-simple test-main
+test-all: test-simple test-main backend-unit-tests
 	@echo "All test suites completed successfully! 🎉"
 
-test-backend: test-simple test-main
+test-backend: test-simple test-main backend-unit-tests
 	@echo "All backend tests completed successfully! 🎉"
 
 test-simple:
@@ -116,10 +119,19 @@ test-main:
 	@echo "Running FastAPI TestClient tests..."
 	docker compose exec backend python -m pytest test_main.py -v
 
-test-frontend:
-	@echo "Frontend tests not yet implemented"
-	@echo "Will be available when frontend is created"
+backend-unit-tests:
+	@echo "Running backend unit tests (CRUD + simulations)..."
+	docker compose exec backend python -m pytest -v tests/
 
+backend-crud-tests:
+	@echo "Running CRUD unit tests..."
+	docker compose exec backend python -m pytest -v tests/test_crud.py
+
+backend-sim-tests:
+	@echo "Running simulations unit tests..."
+	docker compose exec backend python -m pytest -v tests/test_simulations.py
+
+# Frontend Commands
 frontend-lint:
 	@echo "Running frontend lint..."
 	cd frontend && npm run lint || echo "Lint finished with warnings/errors"
