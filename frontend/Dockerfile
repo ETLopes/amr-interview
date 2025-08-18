@@ -1,38 +1,42 @@
-# syntax=docker/dockerfile:1
+# Multi-stage Dockerfile for Next.js frontend (production)
 
-# --- Base ---
-FROM node:20-bullseye AS base
+FROM node:20-alpine AS deps
+WORKDIR /app
+RUN apk add --no-cache libc6-compat
+COPY package.json package-lock.json* yarn.lock* pnpm-lock.yaml* ./
+# Prefer npm; fallback if another lockfile exists
+RUN if [ -f package-lock.json ]; then npm ci --no-audit --no-fund; \
+    elif [ -f yarn.lock ]; then yarn --frozen-lockfile; \
+    elif [ -f pnpm-lock.yaml ]; then corepack enable && pnpm i --frozen-lockfile; \
+    else npm i --no-audit --no-fund; fi
+
+FROM node:20-alpine AS builder
 WORKDIR /app
 ENV NODE_ENV=production
-
-# --- Dependencies ---
-FROM base AS deps
-ENV NODE_ENV=development
-COPY package.json package-lock.json* .npmrc* ./
-RUN npm ci --no-audit --no-fund || npm install --no-audit --no-fund
-
-# --- Builder ---
-FROM base AS builder
-ENV NEXT_TELEMETRY_DISABLED=1
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+# Build Next.js app
 RUN npm run build
 
-# --- Production runner ---
-FROM base AS runner
-ENV NEXT_TELEMETRY_DISABLED=1
+FROM node:20-alpine AS runner
+WORKDIR /app
 ENV NODE_ENV=production
-# Create non-root user
-RUN adduser -D -s /bin/sh appuser \
-  && chown -R appuser:appuser /app
-USER appuser
+ENV PORT=3000
+# Public and server API URLs can be provided at runtime via docker-compose
+# ENV NEXT_PUBLIC_API_URL=
+# ENV API_URL=
 
-# Copy only required build artifacts
-COPY --from=builder /app/next.config.* .
+# Copy only necessary runtime files
+COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/next.config.js ./next.config.js
+COPY --from=builder /app/tailwind.config.js ./tailwind.config.js
+COPY --from=builder /app/postcss.config.js ./postcss.config.js
+COPY --from=builder /app/styles ./styles
 
 EXPOSE 3000
+CMD ["npm", "run", "start"]
 
-CMD ["node", "server.js"]
+

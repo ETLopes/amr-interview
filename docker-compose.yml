@@ -55,7 +55,10 @@ services:
     image: node:20
     container_name: amora_frontend
     environment:
-      - NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+      # Public env used by the browser code
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      # Server-side env used by Next.js server runtime inside the container
+      - API_URL=http://backend:8000
       - NODE_ENV=development
     ports:
       - "3000:3000"
@@ -70,7 +73,6 @@ services:
     working_dir: /app
     command: >
       sh -c "npm ci --no-audit --no-fund && 
-              echo 'NEXT_PUBLIC_API_BASE_URL=http://localhost:8000' > .env.local &&
               ./node_modules/.bin/next dev -H 0.0.0.0 -p 3000"
     restart: unless-stopped
 

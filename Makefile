@@ -15,6 +15,7 @@ help:
 	@echo "  logs           - Show logs from all services"
 	@echo "  logs-backend   - Show backend logs"
 	@echo "  logs-db        - Show database logs"
+	@echo "  logs-frontend  - Show frontend logs"
 	@echo "  clean          - Remove all containers, networks, and volumes"
 	@echo ""
 	@echo "Testing:"
@@ -37,6 +38,7 @@ help:
 	@echo ""
 	@echo "Shell Access:"
 	@echo "  shell-backend  - Access backend container shell"
+	@echo "  shell-frontend - Access frontend container shell"
 	@echo "  shell-db       - Access database shell"
 	@echo "  shell-pgadmin  - Access pgAdmin container shell"
 	@echo ""
@@ -86,6 +88,10 @@ logs-backend:
 logs-db:
 	@echo "Showing database logs..."
 	docker compose logs -f postgres
+
+logs-frontend:
+	@echo "Showing frontend logs..."
+	docker compose logs -f frontend
 
 clean:
 	@echo "Cleaning up Docker resources..."
@@ -192,9 +198,15 @@ stop-frontend:
 
 # Start backend (Docker) and frontend together
 dev-full:
-	@echo "Starting backend services (Docker) and frontend (Next.js)..."
+	@echo "Starting all services with Docker (backend + frontend)..."
 	$(MAKE) up
-	$(MAKE) frontend-dev
+	@echo "- Backend:  http://localhost:8000"
+	@echo "- Frontend: http://localhost:3000"
+	@echo "Use 'make logs-frontend' and 'make logs-backend' to follow logs."
+
+shell-frontend:
+	@echo "Accessing frontend container shell..."
+	docker compose exec frontend sh
 
 # Utility Commands
 status:

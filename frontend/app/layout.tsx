@@ -1,0 +1,41 @@
+import type { Metadata } from 'next';
+import '../styles/globals.css';
+
+export const metadata: Metadata = {
+  title: 'aMORA - Simulador Imobiliário',
+  description: 'Simule a compra do seu imóvel dos sonhos com o aMORA. Calcule entrada, financiamento e planejamento financeiro.',
+  keywords: ['imóveis', 'simulador', 'financiamento', 'casa própria', 'entrada'],
+  authors: [{ name: 'aMORA Team' }],
+  viewport: 'width=device-width, initial-scale=1',
+  themeColor: '#030213',
+  openGraph: {
+    title: 'aMORA - Simulador Imobiliário',
+    description: 'Simule a compra do seu imóvel dos sonhos',
+    type: 'website',
+    locale: 'pt_BR',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'aMORA - Simulador Imobiliário',
+    description: 'Simule a compra do seu imóvel dos sonhos',
+  },
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="pt-BR">
+      <head>
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
+      </head>
+      <body className="antialiased">
+        {children}
+      </body>
+    </html>
+  );
+}

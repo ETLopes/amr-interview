@@ -1,0 +1,57 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: amora_postgres
+    environment:
+      POSTGRES_DB: amora_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - amora_network
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: amora_backend
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/amora_db
+      - SECRET_KEY=${SECRET_KEY:-amora-secret-key-change-in-production}
+      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:3000}
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    networks:
+      - amora_network
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: amora_frontend
+    environment:
+      # Client-side calls from browser go to host-published backend
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+      - API_URL=${API_URL:-http://backend:8000}
+      - NODE_ENV=production
+    depends_on:
+      - backend
+    networks:
+      - amora_network
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  amora_network:
+    driver: bridge
+
+
