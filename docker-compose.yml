@@ -72,8 +72,8 @@ services:
       - node_modules_frontend:/app/node_modules
     working_dir: /app
     command: >
-      sh -c "npm ci --no-audit --no-fund && 
-              ./node_modules/.bin/next dev -H 0.0.0.0 -p 3000"
+      sh -c "npm install --no-audit --no-fund && 
+              npm run dev -- -H 0.0.0.0 -p 3000"
     restart: unless-stopped
 
   # pgAdmin (optional - for database management)
