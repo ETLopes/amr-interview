@@ -1,7 +1,6 @@
 import { getApiConfig } from '../config/api';
 import { HttpClient, initializeHttpClient } from './http';
 import {
-  ApiError,
   User,
   Simulation,
   SimulationCreate,
