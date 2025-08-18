@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from .. import models, schemas
+from ..crud.simulations import SimulationRepository
 
 
 class SimulationService:
@@ -28,54 +29,20 @@ class SimulationService:
             simulation_data.down_payment_percentage,
             simulation_data.contract_years,
         )
-
-        db_simulation = models.Simulation(
-            user_id=user_id,
-            property_value=simulation_data.property_value,
-            down_payment_percentage=simulation_data.down_payment_percentage,
-            contract_years=simulation_data.contract_years,
-            property_address=simulation_data.property_address,
-            property_type=simulation_data.property_type,
-            notes=simulation_data.notes,
-            **calculated_values
-        )
-
-        db.add(db_simulation)
+        db_simulation = SimulationRepository.create(db, user_id, simulation_data)
+        for field, value in calculated_values.items():
+            setattr(db_simulation, field, value)
         db.commit()
         db.refresh(db_simulation)
         return db_simulation
 
     @staticmethod
     def get_user_simulations(db: Session, user_id: int, skip: int = 0, limit: int = 100):
-        simulations = (
-            db.query(models.Simulation)
-            .filter(models.Simulation.user_id == user_id)
-            .offset(skip)
-            .limit(limit)
-            .all()
-        )
-        total = (
-            db.query(models.Simulation)
-            .filter(models.Simulation.user_id == user_id)
-            .count()
-        )
-        return simulations, total
+        return SimulationRepository.list_by_user(db, user_id, skip, limit)
 
     @staticmethod
     def get_simulation(db: Session, simulation_id: int, user_id: int):
-        simulation = (
-            db.query(models.Simulation)
-            .filter(
-                models.Simulation.id == simulation_id,
-                models.Simulation.user_id == user_id,
-            )
-            .first()
-        )
-        if not simulation:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="Simulation not found"
-            )
-        return simulation
+        return SimulationRepository.get_for_user(db, simulation_id, user_id)
 
     @staticmethod
     def update_simulation(
@@ -99,19 +66,12 @@ class SimulationService:
             )
             update_data.update(calculated_values)
 
-        for field, value in update_data.items():
-            setattr(db_simulation, field, value)
-
-        db.commit()
-        db.refresh(db_simulation)
-        return db_simulation
+        return SimulationRepository.update(db, db_simulation, schemas.SimulationUpdate(**update_data))
 
     @staticmethod
     def delete_simulation(db: Session, simulation_id: int, user_id: int):
         db_simulation = SimulationService.get_simulation(db, simulation_id, user_id)
-        db.delete(db_simulation)
-        db.commit()
-        return {"message": "Simulation deleted successfully"}
+        return SimulationRepository.delete(db, db_simulation)
 
     @staticmethod
     def get_simulation_statistics(db: Session, user_id: int):
