@@ -20,7 +20,7 @@ describe('Login route', () => {
 
     render(<LoginPage />);
 
-    expect(screen.getAllByRole('button', { name: /entrar|login/i })).toHaveLength(2);
+    expect(screen.getByRole('button', { name: /entrar|login/i })).toBeInTheDocument();
     expect(push).not.toHaveBeenCalled();
   });
 

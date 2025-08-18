@@ -170,7 +170,7 @@ export const getApiService = (): ApiService => {
     const config = getApiConfig();
     apiServiceInstance = new ApiService(config.baseURL);
     if (typeof window !== 'undefined') {
-      initializeHttpClient((apiServiceInstance as any).http as HttpClient);
+      initializeHttpClient((apiServiceInstance as unknown as { http: HttpClient }).http);
     }
   }
   return apiServiceInstance;
