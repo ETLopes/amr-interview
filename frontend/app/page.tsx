@@ -1,15 +1,18 @@
 'use client';
 
-import React from 'react';
-import { AuthProvider } from '../contexts/AuthContext';
-import { AppContent } from '../components/AppContent';
-import { Toaster } from '../components/ui/sonner';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function HomePage() {
-  return (
-    <AuthProvider>
-      <AppContent />
-      <Toaster />
-    </AuthProvider>
-  );
+  const router = useRouter();
+  const { user, isLoading } = useAuth();
+
+  useEffect(() => {
+    if (isLoading) return;
+    if (user) router.replace('/dashboard');
+    else router.replace('/login');
+  }, [user, isLoading, router]);
+
+  return null;
 }
