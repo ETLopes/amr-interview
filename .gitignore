@@ -1,0 +1,73 @@
+# ---- OS / Editors ----
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.history/
+*.swp
+*.swo
+*~
+
+# ---- Environment files ----
+.env
+.env.*
+frontend/.env
+frontend/.env.*
+backend/.env
+backend/.env.*
+!**/.env.example
+!**/env.example
+
+# ---- Logs ----
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ---- Node / Next.js (frontend) ----
+**/node_modules/
+frontend/.next/
+frontend/.next/cache/
+frontend/out/
+frontend/.vercel/
+frontend/.turbo/
+frontend/.pnp*
+frontend/coverage/
+frontend/.nyc_output/
+frontend/dist/
+frontend/build/
+frontend/.eslintcache
+
+# ---- Python (backend) ----
+__pycache__/
+**/*.py[cod]
+**/*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+htmlcov/
+.coverage
+coverage.xml
+build/
+dist/
+pip-wheel-metadata/
+.venv/
+venv/
+env/
+.python-version
+.ipynb_checkpoints/
+
+# ---- Databases / local data ----
+*.db
+*.sqlite
+*.sqlite3
+
+# ---- Docker ----
+docker-compose.override.yml
+.docker/
+
+
