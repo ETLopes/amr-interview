@@ -1,6 +1,36 @@
 # Simulador Imobiliário aMORA
 
-Uma aplicação full-stack completa para simular compras de imóveis com cálculos de financiamento, construída com tecnologias modernas e boas práticas.
+## TL;DR
+
+Pré-requisitos: Docker, Docker Compose, Make e Git.
+
+Subir o projeto em 2 passos:
+```bash
+git clone git@github.com:ETLopes/amr-interview.git
+cd amora && make up
+```
+
+Primeira vez? Rode as migrações:
+```bash
+make migrate
+```
+
+URLs úteis:
+- Backend API: http://localhost:8000
+- API Docs (Swagger): http://localhost:8000/docs
+- Frontend: http://localhost:3000
+- pgAdmin: http://localhost:5050
+
+Comandos rápidos:
+- Status: `make status`
+- Logs backend: `make logs-backend`
+- Healthcheck API: `make health`
+- Testes backend: `make test-backend`
+- Parar serviços: `make down`
+- Limpar tudo (volumes): `make clean`
+
+Ambiente: usando Docker/Make não precisa criar `.env` (defaults funcionam). Fora do Docker: copie `backend/env.example` para `backend/.env` e ajuste `SECRET_KEY`, `DATABASE_URL`, `CORS_ORIGINS`.
+
 
 ## 🏗️ Visão Geral do Projeto
 
@@ -234,16 +264,6 @@ make prod-down
 - `SECRET_KEY`: Chave de assinatura JWT
 - `CORS_ORIGINS`: Origens permitidas no CORS
 - `LOG_LEVEL`: Nível de log da aplicação
-
-## 🤝 Contribuindo
-
-1. Faça um fork do repositório
-2. Crie uma branch de feature
-3. Implemente suas alterações
-4. Adicione testes para a nova funcionalidade
-5. Garanta que todos os testes passam
-6. Abra um pull request
-
 
 
 ### Recomendações de Funcionalidades de Negócio
