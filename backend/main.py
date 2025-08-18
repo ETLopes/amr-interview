@@ -1,4 +1,5 @@
 from app.main import app
+from app.crud.users import UserRepository  # re-export for tests that patch main.UserRepository
 
 if __name__ == "__main__":
     import uvicorn
