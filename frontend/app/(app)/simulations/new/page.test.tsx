@@ -7,6 +7,10 @@ jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
+jest.mock('@/contexts/AuthContext', () => ({
+  useAuth: () => ({ user: { id: 1 }, isLoading: false }),
+}));
+
 jest.mock('@/components/SimulationForm', () => ({
   SimulationForm: ({ onSuccess, onCancel }: any) => (
     <div>

@@ -5,6 +5,7 @@ import EditSimulationPage from './page';
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
+  useParams: jest.fn().mockReturnValue({ id: '1' }),
 }));
 
 jest.mock('@/components/SimulationForm', () => ({

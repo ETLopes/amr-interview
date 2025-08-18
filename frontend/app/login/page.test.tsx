@@ -16,18 +16,18 @@ describe('Login route', () => {
   it('renders LoginForm when not authenticated', async () => {
     (useAuth as jest.Mock).mockReturnValue({ user: null, isLoading: false });
     const push = jest.fn();
-    (useRouter as jest.Mock).mockReturnValue({ push });
+    (useRouter as jest.Mock).mockReturnValue({ push, replace: push });
 
     render(<LoginPage />);
 
-    expect(screen.getByRole('button', { name: /entrar|login/i })).toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: /entrar|login/i })).toHaveLength(2);
     expect(push).not.toHaveBeenCalled();
   });
 
   it('redirects to /dashboard when authenticated', async () => {
     (useAuth as jest.Mock).mockReturnValue({ user: { id: 1, email: 'test@example.com' }, isLoading: false });
     const push = jest.fn();
-    (useRouter as jest.Mock).mockReturnValue({ push });
+    (useRouter as jest.Mock).mockReturnValue({ push, replace: push });
 
     render(<LoginPage />);
 

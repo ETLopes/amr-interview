@@ -25,7 +25,7 @@ describe('Simulations route', () => {
   it('redirects to /login when unauthenticated', () => {
     (useAuth as jest.Mock).mockReturnValue({ user: null, isLoading: false });
     const push = jest.fn();
-    (useRouter as jest.Mock).mockReturnValue({ push });
+    (useRouter as jest.Mock).mockReturnValue({ push, replace: push });
 
     render(<SimulationsPage />);
 
@@ -35,7 +35,7 @@ describe('Simulations route', () => {
   it('renders SimulationList when authenticated', () => {
     (useAuth as jest.Mock).mockReturnValue({ user: { id: 1 }, isLoading: false });
     const push = jest.fn();
-    (useRouter as jest.Mock).mockReturnValue({ push });
+    (useRouter as jest.Mock).mockReturnValue({ push, replace: push });
 
     render(<SimulationsPage />);
 

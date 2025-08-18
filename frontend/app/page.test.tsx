@@ -16,7 +16,7 @@ describe('Root route /', () => {
   it('redirects to /login when unauthenticated', async () => {
     (useAuth as jest.Mock).mockReturnValue({ user: null, isLoading: false });
     const push = jest.fn();
-    (useRouter as jest.Mock).mockReturnValue({ push });
+    (useRouter as jest.Mock).mockReturnValue({ push, replace: push });
 
     render(<HomePage />);
 
@@ -28,7 +28,7 @@ describe('Root route /', () => {
   it('redirects to /dashboard when authenticated', async () => {
     (useAuth as jest.Mock).mockReturnValue({ user: { id: 1 }, isLoading: false });
     const push = jest.fn();
-    (useRouter as jest.Mock).mockReturnValue({ push });
+    (useRouter as jest.Mock).mockReturnValue({ push, replace: push });
 
     render(<HomePage />);
 
