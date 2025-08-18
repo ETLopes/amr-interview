@@ -75,86 +75,104 @@ O Simulador Imobiliário aMORA é uma ferramenta estratégica projetada para aju
 
 ### 1. Clonar o Repositório
 ```bash
-git clone <repository-url>
+git clone git@github.com:ETLopes/amr-interview.git
 cd amora
 ```
 
 ### 2. Iniciar Todos os Serviços
 ```bash
-docker-compose up -d
+make up
 ```
 
 ### 3. Acessar a Aplicação
 - **API Backend**: http://localhost:8000
 - **Documentação da API**: http://localhost:8000/docs
 - **Admin do Banco**: http://localhost:5050 (pgAdmin)
-- **Frontend**: Em breve
+- **Frontend**: http://localhost:3000
 
 ### 4. Verificar Instalação
 ```bash
 # Verificar status dos serviços
-docker-compose ps
+make status
 
-# Ver logs
-docker-compose logs -f backend
+# Ver logs do backend
+make logs-backend
 
 # Testar health da API
-curl http://localhost:8000/health
+make health
 ```
 
 ## 📁 Estrutura do Projeto
 
 ```
 amora/
-├── backend/                 # Backend FastAPI
-│   ├── alembic/            # Migrações de banco de dados
-│   ├── models.py           # Modelos do banco de dados
-│   ├── schemas.py          # Schemas Pydantic
-│   ├── auth.py             # Lógica de autenticação
-│   ├── main.py             # Aplicação FastAPI
-│   └── README.md           # Documentação do backend
-├── frontend/               # Frontend React (em breve)
-├── docker-compose.yml      # Orquestração dos serviços
-├── GUIDELINES.md           # Requisitos do projeto
-└── README.md               # Este arquivo
+├── backend/                          # Backend FastAPI
+│   ├── app/
+│   │   ├── api/
+│   │   │   └── routes/               # Rotas da API (auth, users, simulations)
+│   │   ├── core/                     # Segurança, configurações
+│   │   ├── crud/                     # Repositórios de dados (UserRepository, etc.)
+│   │   ├── services/                 # Regras de negócio (SimulationService, etc.)
+│   │   ├── db.py                     # Engine, sessão, Base e get_db
+│   │   ├── models.py                 # Modelos SQLAlchemy
+│   │   ├── schemas.py                # Schemas Pydantic
+│   │   └── main.py                   # Instância FastAPI e inclusão de rotas
+│   ├── alembic/                      # Migrações de banco de dados
+│   ├── main.py                       # Entrada fina para uvicorn (reexporta app)
+│   └── requirements.txt
+├── frontend/                          # Frontend Next.js (App Router)
+│   ├── app/                           # Páginas/rotas
+│   ├── components/                    # Componentes reutilizáveis
+│   └── services/                      # Facade e serviços de API
+├── Dockerfile                         # Docker multi-stage (frontend + backend)
+├── docker-compose.yml                 # Orquestração dev
+├── docker-compose.prod.yml            # Orquestração prod
+├── Makefile                           # Comandos de desenvolvimento
+└── README.md                          # Este arquivo
 ```
 
 ## 🔧 Desenvolvimento
 
 ### Desenvolvimento do Backend
 ```bash
-cd backend
-
-# Criar ambiente virtual
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-
-# Instalar dependências
-pip install -r requirements.txt
+# Subir os serviços (backend, db, frontend)
+make up
 
 # Executar migrações
-alembic upgrade head
+make migrate
 
-# Iniciar servidor de desenvolvimento
-uvicorn main:app --reload
+# Acompanhar logs do backend
+make logs-backend
+
+# Acessar shell do container backend
+make shell-backend
 ```
 
 ### Executando Testes
 ```bash
-cd backend
-pytest test_main.py -v
+# Todos os testes de backend (unitários)
+make test-backend
+
+# Apenas unit tests de CRUD
+make backend-crud-tests
+
+# Apenas unit tests de simulação
+make backend-sim-tests
 ```
 
 ### Gerenciamento do Banco de Dados
 ```bash
 # Acessar o PostgreSQL
-docker-compose exec postgres psql -U postgres -d amora_db
+make shell-db
 
 # Executar migrações
-docker-compose exec backend alembic upgrade head
+make migrate
 
 # Criar nova migração
-docker-compose exec backend alembic revision --autogenerate -m "Description"
+make migrate-create message="Descrição das mudanças"
+
+# Reverter última migração
+make migrate-rollback
 ```
 
 ## 🌐 Endpoints da API
@@ -192,51 +210,23 @@ O simulador implementa as fórmulas especificadas nos requisitos:
 - **Proteção contra SQL Injection**: Consultas via ORM
 - **Configuração de CORS**: Requisições cross-origin seguras
 
-## 📈 Considerações de Escalabilidade
-
-### Escala do Banco de Dados
-- **Réplicas de Leitura**: Implementar para cargas intensas de leitura
-- **Pool de Conexões**: Usar PgBouncer
-- **Sharding**: Particionamento horizontal para grandes volumes
-
-### Escala da Aplicação
-- **Balanceamento de Carga**: Nginx como proxy reverso com múltiplas instâncias
-- **Cache**: Redis para sessões e cache de respostas
-- **Microsserviços**: Dividir por domínios quando necessário
-
-### Escala da Infraestrutura
-- **Orquestração**: Kubernetes para produção
-- **Auto-escalonamento**: Grupos de auto-scale em nuvem
-- **CDN**: Distribuição de conteúdos estáticos
-
-## 🧪 Estratégia de Testes
-
-### Cobertura de Testes
-- **Unitários**: Testes de funções e classes isoladas
-- **Integração**: Testes de endpoints da API
-- **End-to-End**: Fluxos completos do usuário
-- **Performance**: Carga e estresse
-
-### Ferramentas de Teste
-- **Pytest**: Framework de testes em Python
-- **FastAPI TestClient**: Cliente HTTP para testes
-- **Coverage.py**: Análise de cobertura
-- **Locust**: Testes de carga
-
 ## 🚀 Implantação
 
 ### Ambiente de Desenvolvimento
 ```bash
-docker-compose up -d
+make up
 ```
 
 ### Ambiente de Produção
 ```bash
 # Construir imagens de produção
-docker-compose -f docker-compose.prod.yml build
+make prod-build
 
 # Subir com configuração de produção
-docker-compose -f docker-compose.prod.yml up -d
+make prod-up
+
+# Parar serviços de produção
+make prod-down
 ```
 
 ### Variáveis de Ambiente
