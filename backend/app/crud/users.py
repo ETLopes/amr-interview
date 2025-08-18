@@ -5,7 +5,7 @@ from .. import models, schemas
 from ..core.security import get_password_hash
 
 
-class UserCRUD:
+class UserRepository:
 
     @staticmethod
     def create_user(db: Session, user: schemas.UserCreate):
@@ -39,7 +39,7 @@ class UserCRUD:
 
     @staticmethod
     def update_user(db: Session, user_id: int, user_update: schemas.UserUpdate):
-        db_user = UserCRUD.get_user_by_id(db, user_id)
+        db_user = UserRepository.get_user_by_id(db, user_id)
         if not db_user:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
@@ -56,7 +56,7 @@ class UserCRUD:
 
     @staticmethod
     def delete_user(db: Session, user_id: int):
-        db_user = UserCRUD.get_user_by_id(db, user_id)
+        db_user = UserRepository.get_user_by_id(db, user_id)
         if not db_user:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="User not found"

@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from ... import models, schemas
 from ...db import get_db
 from ...core.security import get_current_active_user
-from ...crud.users import UserCRUD
+from ...crud.users import UserRepository
 
 router = APIRouter()
 
@@ -20,6 +20,6 @@ async def update_user_me(
     current_user: models.User = Depends(get_current_active_user),
     db: Session = Depends(get_db),
 ):
-    return UserCRUD.update_user(db, current_user.id, user_update)
+    return UserRepository.update_user(db, current_user.id, user_update)
 
 

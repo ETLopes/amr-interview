@@ -80,7 +80,7 @@ def test_calculate_invalid_inputs():
     assert response.status_code == 422
 
 
-@patch("main.UserCRUD.create_user")
+@patch("main.UserRepository.create_user")
 def test_register_user(mock_create_user):
     """Test user registration"""
     mock_user = MagicMock()
@@ -102,7 +102,7 @@ def test_register_user(mock_create_user):
     assert data["name"] is None
 
 
-@patch("main.UserCRUD.create_user")
+@patch("main.UserRepository.create_user")
 def test_register_user_with_name(mock_create_user):
     """Test user registration with name"""
     mock_user = MagicMock()

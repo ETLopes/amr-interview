@@ -6,18 +6,18 @@ from sqlalchemy.orm import Session
 from ...db import get_db
 from ... import schemas
 from ...core.security import authenticate_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
-from ...crud.users import UserCRUD
+from ...crud.users import UserRepository
 
 router = APIRouter()
 
 
 @router.post("/register", response_model=schemas.User)
 async def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    if UserCRUD.get_user_by_email(db, user.email):
+    if UserRepository.get_user_by_email(db, user.email):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered"
         )
-    return UserCRUD.create_user(db, user)
+    return UserRepository.create_user(db, user)
 
 
 @router.post("/token", response_model=schemas.Token)

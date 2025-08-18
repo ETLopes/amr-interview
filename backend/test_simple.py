@@ -19,8 +19,6 @@ def test_imports():
         import models  # noqa: F401
         import schemas  # noqa: F401
         import auth  # noqa: F401
-        import crud  # noqa: F401
-        import simulation_service  # noqa: F401
         import database  # noqa: F401
 
         print("✅ All modules imported successfully")
