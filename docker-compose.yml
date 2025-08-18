@@ -23,9 +23,10 @@ services:
 
   # FastAPI Backend
   backend:
-    build: 
-      context: ./backend
+    build:
+      context: .
       dockerfile: Dockerfile
+      target: backend
     container_name: amora_backend
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/amora_db
@@ -52,7 +53,10 @@ services:
 
   # Next.js Frontend
   frontend:
-    image: node:20
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: frontend
     container_name: amora_frontend
     environment:
       # Public env used by the browser code

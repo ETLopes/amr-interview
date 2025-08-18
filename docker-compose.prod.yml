@@ -14,8 +14,9 @@ services:
 
   backend:
     build:
-      context: ./backend
+      context: .
       dockerfile: Dockerfile
+      target: backend
     container_name: amora_backend
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/amora_db
@@ -31,8 +32,9 @@ services:
 
   frontend:
     build:
-      context: ./frontend
+      context: .
       dockerfile: Dockerfile
+      target: frontend
     container_name: amora_frontend
     environment:
       # Client-side calls from browser go to host-published backend
