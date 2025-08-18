@@ -50,21 +50,27 @@ services:
       retries: 3
     restart: unless-stopped
 
-  # React Frontend (will be added later)
-  # frontend:
-  #   build: ./frontend
-  #   container_name: amora_frontend
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - backend
-  #   networks:
-  #     - amora_network
-  #   volumes:
-  #     - ./frontend:/app
-  #     - /app/node_modules
-  #   environment:
-  #     - REACT_APP_API_URL=http://localhost:8000
+  # Next.js Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: amora_frontend
+    environment:
+      - NEXT_PUBLIC_API_BASE_URL=http://backend:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      backend:
+        condition: service_started
+    networks:
+      - amora_network
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: >
+      sh -c "npm install && npm run dev"
+    restart: unless-stopped
 
   # pgAdmin (optional - for database management)
   pgadmin:

@@ -49,6 +49,14 @@ help:
 	@echo "  status         - Show service status"
 	@echo "  health         - Check API health"
 	@echo "  api-docs       - Open API documentation in browser"
+	@echo ""
+	@echo "Frontend:"
+	@echo "  install-frontend-deps - Install frontend dependencies"
+	@echo "  frontend-dev     - Start Next.js dev server"
+	@echo "  frontend-build   - Build Next.js app"
+	@echo "  frontend-start   - Start Next.js app (prod)"
+	@echo "  stop-frontend    - Stop Next.js dev server (port 3000)"
+	@echo "  dev-full         - Start backend (Docker) and frontend (Next.js)"
 
 # Development Commands
 build:
@@ -106,6 +114,14 @@ test-frontend:
 	@echo "Frontend tests not yet implemented"
 	@echo "Will be available when frontend is created"
 
+frontend-lint:
+	@echo "Running frontend lint..."
+	cd frontend && npm run lint || echo "Lint finished with warnings/errors"
+
+frontend-test:
+	@echo "Running frontend unit tests..."
+	cd frontend && npm run test -- --run
+
 # Code Quality Commands
 lint:
 	@echo "Running linting checks..."
@@ -153,9 +169,32 @@ install-backend-deps:
 	@echo "Installing backend dependencies..."
 	docker compose exec backend pip install -r requirements.txt
 
+# Frontend Commands
 install-frontend-deps:
-	@echo "Frontend dependencies not yet implemented"
-	@echo "Will be available when frontend is created"
+	@echo "Installing frontend dependencies..."
+	cd frontend && npm install
+
+frontend-dev:
+	@echo "Starting Next.js dev server on http://localhost:3000 ..."
+	cd frontend && npm run dev
+
+frontend-build:
+	@echo "Building Next.js app..."
+	cd frontend && npm run build
+
+frontend-start:
+	@echo "Starting Next.js app (production mode) on http://localhost:3000 ..."
+	cd frontend && npm run start
+
+stop-frontend:
+	@echo "Stopping Next.js dev server on port 3000..."
+	-@lsof -ti:3000 | xargs kill -9 2>/dev/null || true
+
+# Start backend (Docker) and frontend together
+dev-full:
+	@echo "Starting backend services (Docker) and frontend (Next.js)..."
+	$(MAKE) up
+	$(MAKE) frontend-dev
 
 # Utility Commands
 status:
