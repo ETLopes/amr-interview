@@ -60,7 +60,7 @@ def test_calculation_formulas():
 def test_schema_validation():
     """Test Pydantic schema validation"""
     try:
-        from schemas import UserCreate, SimulationCreate
+        from app.schemas import UserCreate, SimulationCreate
 
         # Test valid user creation
         user_data = {"email": "test@example.com", "password": "password123"}
@@ -95,7 +95,7 @@ def test_schema_validation():
 def test_email_validation():
     """Test email validation"""
     try:
-        from schemas import UserCreate
+        from app.schemas import UserCreate
 
         # Test valid email
         try:
