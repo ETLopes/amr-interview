@@ -105,19 +105,19 @@ clean:
 test: test-all
 	@echo "All tests completed successfully! 🎉"
 
-test-all: test-simple test-main backend-unit-tests
+test-all: backend-unit-tests
 	@echo "All test suites completed successfully! 🎉"
 
-test-backend: test-simple test-main backend-unit-tests
+test-backend: backend-unit-tests
 	@echo "All backend tests completed successfully! 🎉"
 
 test-simple:
-	@echo "Running simple backend tests..."
-	docker compose exec backend python test_simple.py
+	@echo "(Deprecated) Running simple backend tests..."
+	docker compose exec backend python -m pytest -v tests/test_simple.py
 
 test-main:
 	@echo "Running FastAPI TestClient tests..."
-	docker compose exec backend python -m pytest test_main.py -v
+	docker compose exec backend python -m pytest -v tests/test_main.py
 
 backend-unit-tests:
 	@echo "Running backend unit tests (CRUD + simulations)..."
