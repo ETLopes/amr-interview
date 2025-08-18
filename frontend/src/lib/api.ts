@@ -1,18 +1,25 @@
-export const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+// API Configuration with proper environment handling
+import { getApiUrl, logEnvironment } from '@/config/environment';
 import { logout } from "@/lib/auth";
+
+// Log environment configuration in development
+if (typeof window !== 'undefined') {
+  logEnvironment();
+}
 
 export async function apiFetch<T>(
   path: string,
   options: RequestInit = {},
   token?: string
 ): Promise<T> {
-  const url = `${API_BASE}${path}`;
+  const url = getApiUrl(path);
   const headers = new Headers(options.headers);
   if (!headers.has("Content-Type") && !(options.body instanceof URLSearchParams)) {
     headers.set("Content-Type", "application/json");
   }
   if (token) headers.set("Authorization", `Bearer ${token}`);
+
+  console.log(`🌐 API Request: ${url}`); // Debug logging
 
   const res = await fetch(url, { ...options, headers, cache: "no-store" });
   if (!res.ok) {

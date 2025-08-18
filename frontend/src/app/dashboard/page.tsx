@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { me, CurrentUser } from "@/lib/auth";
 import RequireAuth from "@/components/require-auth";
-import CreditScoreCard from "@/components/CreditScoreCard";
-import PropertyImporter from "@/components/PropertyImporter";
+import { CreditScoreCard } from "@/components/CreditScoreCard";
+import { PropertyImporter } from "@/components/PropertyImporter";
 import Link from "next/link";
 
 export default function DashboardPage() {

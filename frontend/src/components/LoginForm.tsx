@@ -1,4 +1,7 @@
+'use client';
+
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -128,6 +131,15 @@ export function LoginForm() {
               </div>
             </div>
           </CardContent>
+          {/* Register link */}
+          <div className="px-6 pb-6">
+            <p className="text-center text-sm text-muted-foreground">
+              Não tem conta?{' '}
+              <Link href="/auth/register" className="underline underline-offset-4">
+                Criar conta
+              </Link>
+            </p>
+          </div>
         </Card>
       </div>
     </div>

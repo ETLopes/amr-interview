@@ -7,6 +7,8 @@ import { Label } from './ui/label';
 import { useAuth } from '@/contexts/AuthContext';
 import { CreditScoreCard } from './CreditScoreCard';
 import { PropertyImporter } from './PropertyImporter';
+import { BackendStatus } from './BackendStatus';
+import { ApiDebug } from './ApiDebug';
 import {
   Home,
   DollarSign,
@@ -80,32 +82,40 @@ export function Dashboard({ onCreateNew, onViewAll }: DashboardProps) {
           </p>
         </div>
 
-        {/* Beta Features Toggle */}
-        <Card className="border-dashed">
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="beta-mode"
-                checked={betaFeaturesEnabled}
-                onCheckedChange={toggleBetaFeatures}
-              />
-              <Label htmlFor="beta-mode" className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-purple-500" />
-                <span>Recursos Beta</span>
-                {betaFeaturesEnabled && (
-                  <Badge variant="secondary" className="text-xs">
-                    ATIVO
-                  </Badge>
-                )}
-              </Label>
-            </div>
-            {betaFeaturesEnabled && (
-              <p className="text-xs text-muted-foreground mt-2">
-                Score de crédito e importador de anúncios ativados
-              </p>
-            )}
-          </CardContent>
-        </Card>
+        <div className="flex gap-4">
+          {/* Backend Status */}
+          <BackendStatus />
+
+          {/* API Debug (Temporary) */}
+          <ApiDebug />
+
+          {/* Beta Features Toggle */}
+          <Card className="border-dashed">
+            <CardContent className="p-4">
+              <div className="flex items-center space-x-2">
+                <Switch
+                  id="beta-mode"
+                  checked={betaFeaturesEnabled}
+                  onCheckedChange={toggleBetaFeatures}
+                />
+                <Label htmlFor="beta-mode" className="flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-purple-500" />
+                  <span>Recursos Beta</span>
+                  {betaFeaturesEnabled && (
+                    <Badge variant="secondary" className="text-xs">
+                      ATIVO
+                    </Badge>
+                  )}
+                </Label>
+              </div>
+              {betaFeaturesEnabled && (
+                <p className="text-xs text-muted-foreground mt-2">
+                  Score de crédito e importador de anúncios ativados
+                </p>
+              )}
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
       {/* Beta Features Section */}

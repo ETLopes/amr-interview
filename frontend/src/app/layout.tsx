@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import ClientLayout from './ClientLayout';
 
@@ -8,8 +8,6 @@ export const metadata: Metadata = {
     'Simule a compra do seu imóvel dos sonhos com o aMORA. Calcule entrada, financiamento e planejamento financeiro.',
   keywords: ['imóveis', 'simulador', 'financiamento', 'casa própria', 'entrada'],
   authors: [{ name: 'aMORA Team' }],
-  viewport: 'width=device-width, initial-scale=1',
-  themeColor: '#030213',
   openGraph: {
     title: 'aMORA - Simulador Imobiliário',
     description: 'Simule a compra do seu imóvel dos sonhos',
@@ -21,6 +19,12 @@ export const metadata: Metadata = {
     title: 'aMORA - Simulador Imobiliário',
     description: 'Simule a compra do seu imóvel dos sonhos',
   },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#030213',
 };
 
 export default function RootLayout({
