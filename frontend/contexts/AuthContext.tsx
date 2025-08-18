@@ -109,9 +109,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               action: {
                 label: 'Modo Demo',
                 onClick: async () => {
-                  apiService.setOfflineMode(true);
+                  getApiService().setOfflineMode(true);
                   try {
-                    const { user: demoUser } = await apiService.login(email, password);
+                    const { user: demoUser } = await getApiService().login(email, password);
                     setUser(demoUser);
                     await loadSimulations();
                     toast.success(`Bem-vindo ao modo demo, ${demoUser.nome || demoUser.email}!`);
@@ -139,7 +139,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       setIsLoading(true);
       const apiService = getApiService();
-      const newUser = await apiService.register({ email, nome, senha });
+      await apiService.register({ email, nome, senha });
 
       // After registration, automatically log in
       await login(email, senha);
