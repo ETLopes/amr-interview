@@ -4,15 +4,15 @@ import React, { useState } from 'react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { useAuth, Simulation } from '../contexts/AuthContext';
-import { apiService } from '../services/api';
+import { getApiService } from '../services/api';
 import { Dashboard } from './Dashboard';
 import { SimulationForm } from './SimulationForm';
 import { SimulationList } from './SimulationList';
-import { 
-  Home, 
-  Calculator, 
-  List, 
-  LogOut, 
+import {
+  Home,
+  Calculator,
+  List,
+  LogOut,
   User,
   ArrowLeft,
   Settings,
@@ -26,7 +26,7 @@ export function MainApp() {
   const [currentView, setCurrentView] = useState<View>('dashboard');
   const [editingSimulation, setEditingSimulation] = useState<Simulation | null>(null);
   const { user, logout, simulations } = useAuth();
-  const isOffline = apiService.isOffline();
+  const isOffline = typeof window !== 'undefined' ? getApiService().isOffline() : false;
 
   const handleCreateNew = () => {
     setEditingSimulation(null);
@@ -84,7 +84,7 @@ export function MainApp() {
                   Voltar
                 </Button>
               )}
-              
+
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-primary rounded-lg">
                   <Home className="h-5 w-5 text-primary-foreground" />
@@ -115,7 +115,7 @@ export function MainApp() {
                 <Home className="h-4 w-4" />
                 Dashboard
               </Button>
-              
+
               <Button
                 variant={currentView === 'simulations' ? 'default' : 'ghost'}
                 size="sm"
@@ -130,7 +130,7 @@ export function MainApp() {
                   </Badge>
                 )}
               </Button>
-              
+
               <Button
                 variant="ghost"
                 size="sm"
@@ -148,7 +148,7 @@ export function MainApp() {
                 <User className="h-4 w-4 text-muted-foreground" />
                 <span className="font-medium">{user?.nome}</span>
               </div>
-              
+
               <Button
                 variant="ghost"
                 size="sm"
@@ -176,7 +176,7 @@ export function MainApp() {
               <Home className="h-4 w-4" />
               Dashboard
             </Button>
-            
+
             <Button
               variant={currentView === 'simulations' ? 'default' : 'ghost'}
               size="sm"
@@ -191,7 +191,7 @@ export function MainApp() {
                 </Badge>
               )}
             </Button>
-            
+
             <Button
               variant="ghost"
               size="sm"
@@ -213,14 +213,14 @@ export function MainApp() {
             onViewAll={() => setCurrentView('simulations')}
           />
         )}
-        
+
         {currentView === 'simulations' && (
           <SimulationList
             onCreateNew={handleCreateNew}
             onEdit={handleEdit}
           />
         )}
-        
+
         {(currentView === 'new-simulation' || currentView === 'edit-simulation') && (
           <SimulationForm
             simulation={editingSimulation}
@@ -243,7 +243,7 @@ export function MainApp() {
                 v1.0.0
               </Badge>
             </div>
-            
+
             <p className="text-xs text-muted-foreground">
               © 2024 aMORA. Simulador de Compra de Imóveis
             </p>

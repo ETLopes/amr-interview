@@ -9,14 +9,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Alert, AlertDescription } from './ui/alert';
 import { Badge } from './ui/badge';
 import { useAuth } from '../contexts/AuthContext';
-import { apiService } from '../services/api';
+import { getApiService } from '../services/api';
 import { Home, Mail, Lock, User, AlertCircle, Loader2, Wifi, WifiOff } from 'lucide-react';
 
 export function LoginForm() {
   const { login, register, isLoading } = useAuth();
   const [activeTab, setActiveTab] = useState('login');
   const [error, setError] = useState('');
-  const [isOffline, setIsOffline] = useState(apiService.isOffline());
+  const [isOffline, setIsOffline] = useState(typeof window !== 'undefined' ? getApiService().isOffline() : false);
 
   // Login form state
   const [loginData, setLoginData] = useState({
@@ -84,9 +84,9 @@ export function LoginForm() {
 
   const handleDemoLogin = async () => {
     setError('');
-    apiService.setOfflineMode(true);
+    getApiService().setOfflineMode(true);
     setIsOffline(true);
-    
+
     try {
       await login('demo@amora.com', 'demo123');
     } catch (err) {
@@ -96,7 +96,7 @@ export function LoginForm() {
 
   const toggleOfflineMode = () => {
     const newOfflineMode = !isOffline;
-    apiService.setOfflineMode(newOfflineMode);
+    getApiService().setOfflineMode(newOfflineMode);
     setIsOffline(newOfflineMode);
     setError('');
   };
@@ -364,7 +364,7 @@ export function LoginForm() {
           <p>
             Simule diferentes cenários de compra e descubra o melhor plano para você
           </p>
-          
+
           {isOffline && (
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-4">
               <p className="text-blue-800 text-xs">

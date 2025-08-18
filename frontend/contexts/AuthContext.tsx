@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { getApiService, User, Simulation, SimulationCreate } from '../services/api';
-import { toast } from 'sonner@2.0.3';
+import { toast } from 'sonner';
 
 interface AuthContextType {
   user: User | null;
@@ -36,11 +36,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [simulations, setSimulations] = useState<Simulation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [betaFeaturesEnabled, setBetaFeaturesEnabled] = useState(() => {
-    return localStorage.getItem('betaFeatures') === 'true';
-  });
+  const [betaFeaturesEnabled, setBetaFeaturesEnabled] = useState(false);
 
-  // Initialize auth state
+  // Initialize auth state and beta features flag
   useEffect(() => {
     const initializeAuth = async () => {
       try {
@@ -48,19 +46,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const apiService = getApiService();
         const connectionTest = await apiService.testConnection();
         console.log('API Connection Test:', connectionTest);
-        
+
         if (!connectionTest.connected && !connectionTest.offlineMode) {
           console.log('API not available, enabling offline mode');
           apiService.setOfflineMode(true);
         }
-        
+
         const token = localStorage.getItem('access_token');
         if (token) {
           try {
             // Try to get current user
             const currentUser = await apiService.getCurrentUser();
             setUser(currentUser);
-            
+
             // Load simulations for the user
             await loadSimulations();
           } catch (userError) {
@@ -78,6 +76,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     initializeAuth();
+    // Load beta flag from localStorage on client
+    try {
+      if (typeof window !== 'undefined') {
+        setBetaFeaturesEnabled(localStorage.getItem('betaFeatures') === 'true');
+      }
+    } catch { }
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -86,21 +90,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const apiService = getApiService();
       const { user: loggedInUser } = await apiService.login(email, password);
       setUser(loggedInUser);
-      
+
       // Load user's simulations
       await loadSimulations();
-      
+
       const isOffline = apiService.isOffline();
       toast.success(
         `Bem-vindo, ${loggedInUser.nome || loggedInUser.email}!${isOffline ? ' (Modo Demo)' : ''}`
       );
     } catch (error) {
       console.error('Login failed:', error);
-      
+
       if (error instanceof Error) {
         if (error.message === 'AUTH_FAILED') {
           toast.error(
-            'Não foi possível conectar com o servidor. Deseja usar o modo demo?', 
+            'Não foi possível conectar com o servidor. Deseja usar o modo demo?',
             {
               action: {
                 label: 'Modo Demo',
@@ -124,7 +128,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         toast.error('Erro ao fazer login');
       }
-      
+
       throw error;
     } finally {
       setIsLoading(false);
@@ -136,10 +140,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsLoading(true);
       const apiService = getApiService();
       const newUser = await apiService.register({ email, nome, senha });
-      
+
       // After registration, automatically log in
       await login(email, senha);
-      
+
       toast.success('Conta criada com sucesso!');
     } catch (error) {
       console.error('Registration failed:', error);
@@ -188,7 +192,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const apiService = getApiService();
       const updatedSimulation = await apiService.updateSimulation(id, simulationData);
-      setSimulations(prev => 
+      setSimulations(prev =>
         prev.map(sim => sim.id === id ? updatedSimulation : sim)
       );
       toast.success('Simulação atualizada com sucesso!');
@@ -217,8 +221,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const toggleBetaFeatures = () => {
     const newState = !betaFeaturesEnabled;
     setBetaFeaturesEnabled(newState);
-    localStorage.setItem('betaFeatures', newState.toString());
-    
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('betaFeatures', newState.toString());
+      }
+    } catch { }
+
     if (newState) {
       toast.success('Recursos Beta ativados!');
     } else {
@@ -248,19 +256,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Calculate factors
     const avgDownPayment = simulations.reduce((sum, sim) => sum + sim.percentualEntrada, 0) / simulations.length;
     const avgContractYears = simulations.reduce((sum, sim) => sum + sim.anosContrato, 0) / simulations.length;
-    
+
     // Factor 1: Average down payment (0-25 points)
     const downPaymentScore = Math.min(25, (avgDownPayment / 30) * 25);
-    
+
     // Factor 2: Contract stability - prefer moderate contract lengths (0-25 points)
     const optimalYears = 20;
     const stabilityScore = Math.max(0, 25 - Math.abs(avgContractYears - optimalYears) * 2);
-    
+
     // Factor 3: Number of simulations (0-25 points)
     const simulationScore = Math.min(25, simulations.length * 5);
-    
+
     // Factor 4: Planning consistency - variance in down payment (0-25 points)
-    const downPaymentVariance = simulations.reduce((sum, sim) => 
+    const downPaymentVariance = simulations.reduce((sum, sim) =>
       sum + Math.pow(sim.percentualEntrada - avgDownPayment, 2), 0) / simulations.length;
     const consistencyScore = Math.max(0, 25 - downPaymentVariance);
 
@@ -275,7 +283,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Generate recommendations
     const recommendations: string[] = [];
-    
+
     if (downPaymentScore < 15) {
       recommendations.push('Considere aumentar o percentual de entrada para melhorar as condições do financiamento');
     }

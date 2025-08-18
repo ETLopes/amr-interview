@@ -150,13 +150,20 @@ class ApiService {
   private token: string | null = null;
   private offlineMode: boolean = false;
   private mockUserId: number = 1;
+  private offlineSimulationsInMemory: Simulation[] = [];
 
   constructor(baseURL: string) {
     this.baseURL = baseURL;
-    // Load token from localStorage on initialization
-    this.token = localStorage.getItem('access_token');
-    // Check if offline mode is enabled
-    this.offlineMode = localStorage.getItem('offline_mode') === 'true';
+    // Load token/offline mode only in browser
+    if (typeof window !== 'undefined') {
+      try {
+        this.token = localStorage.getItem('access_token');
+        this.offlineMode = localStorage.getItem('offline_mode') === 'true';
+      } catch {
+        this.token = null;
+        this.offlineMode = false;
+      }
+    }
   }
 
   // Method to update API base URL if needed
@@ -172,7 +179,11 @@ class ApiService {
   // Enable/disable offline mode
   setOfflineMode(offline: boolean) {
     this.offlineMode = offline;
-    localStorage.setItem('offline_mode', offline.toString());
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('offline_mode', offline.toString());
+      } catch {}
+    }
   }
 
   // Check if in offline mode
@@ -235,12 +246,20 @@ class ApiService {
 
   setToken(token: string) {
     this.token = token;
-    localStorage.setItem('access_token', token);
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('access_token', token);
+      } catch {}
+    }
   }
 
   clearToken() {
     this.token = null;
-    localStorage.removeItem('access_token');
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem('access_token');
+      } catch {}
+    }
   }
 
   // Health check
@@ -396,10 +415,18 @@ class ApiService {
         dataCriacao: new Date().toISOString(),
       };
       
-      // Save to localStorage for persistence in offline mode
-      const existingSimulations = JSON.parse(localStorage.getItem('offline_simulations') || '[]');
-      existingSimulations.push(mockSimulation);
-      localStorage.setItem('offline_simulations', JSON.stringify(existingSimulations));
+      // Save in browser localStorage when available, else keep in memory (SSR)
+      if (typeof window !== 'undefined') {
+        try {
+          const existingSimulations = JSON.parse(localStorage.getItem('offline_simulations') || '[]');
+          existingSimulations.push(mockSimulation);
+          localStorage.setItem('offline_simulations', JSON.stringify(existingSimulations));
+        } catch {
+          this.offlineSimulationsInMemory.push(mockSimulation);
+        }
+      } else {
+        this.offlineSimulationsInMemory.push(mockSimulation);
+      }
       
       // Simulate network delay
       await new Promise(resolve => setTimeout(resolve, 300));
@@ -418,7 +445,16 @@ class ApiService {
   async getSimulations(skip = 0, limit = 100): Promise<{ simulations: Simulation[]; total: number }> {
     // Offline mode - return simulations from localStorage
     if (this.offlineMode) {
-      const simulations = JSON.parse(localStorage.getItem('offline_simulations') || '[]');
+      let simulations: Simulation[] = [];
+      if (typeof window !== 'undefined') {
+        try {
+          simulations = JSON.parse(localStorage.getItem('offline_simulations') || '[]');
+        } catch {
+          simulations = this.offlineSimulationsInMemory;
+        }
+      } else {
+        simulations = this.offlineSimulationsInMemory;
+      }
       
       // Simulate network delay
       await new Promise(resolve => setTimeout(resolve, 200));
@@ -475,9 +511,17 @@ class ApiService {
   async deleteSimulation(id: number): Promise<void> {
     // Offline mode - remove from localStorage
     if (this.offlineMode) {
-      const simulations = JSON.parse(localStorage.getItem('offline_simulations') || '[]');
-      const filteredSimulations = simulations.filter((sim: Simulation) => sim.id !== id);
-      localStorage.setItem('offline_simulations', JSON.stringify(filteredSimulations));
+      if (typeof window !== 'undefined') {
+        try {
+          const simulations = JSON.parse(localStorage.getItem('offline_simulations') || '[]');
+          const filteredSimulations = simulations.filter((sim: Simulation) => sim.id !== id);
+          localStorage.setItem('offline_simulations', JSON.stringify(filteredSimulations));
+        } catch {
+          this.offlineSimulationsInMemory = this.offlineSimulationsInMemory.filter((sim) => sim.id !== id);
+        }
+      } else {
+        this.offlineSimulationsInMemory = this.offlineSimulationsInMemory.filter((sim) => sim.id !== id);
+      }
       
       // Simulate network delay
       await new Promise(resolve => setTimeout(resolve, 200));
@@ -544,8 +588,7 @@ const initializeApiService = async (service: ApiService) => {
   }
 };
 
-// Export the service instance (backwards compatibility)
-export const apiService = getApiService();
+// Do not export a singleton at module scope to avoid SSR side-effects.
 
 // Export error types for better error handling
 export class ApiError extends Error {
