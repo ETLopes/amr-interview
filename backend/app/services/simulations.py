@@ -29,12 +29,7 @@ class SimulationService:
             simulation_data.down_payment_percentage,
             simulation_data.contract_years,
         )
-        db_simulation = SimulationRepository.create(db, user_id, simulation_data)
-        for field, value in calculated_values.items():
-            setattr(db_simulation, field, value)
-        db.commit()
-        db.refresh(db_simulation)
-        return db_simulation
+        return SimulationRepository.create(db, user_id, simulation_data, calculated_values)
 
     @staticmethod
     def get_user_simulations(db: Session, user_id: int, skip: int = 0, limit: int = 100):
@@ -66,7 +61,7 @@ class SimulationService:
             )
             update_data.update(calculated_values)
 
-        return SimulationRepository.update(db, db_simulation, schemas.SimulationUpdate(**update_data))
+        return SimulationRepository.update(db, db_simulation, update_data)
 
     @staticmethod
     def delete_simulation(db: Session, simulation_id: int, user_id: int):

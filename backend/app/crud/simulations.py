@@ -6,7 +6,13 @@ from .. import models, schemas
 class SimulationRepository:
 
     @staticmethod
-    def create(db: Session, user_id: int, data: schemas.SimulationCreate) -> models.Simulation:
+    def create(
+        db: Session,
+        user_id: int,
+        data: schemas.SimulationCreate,
+        calculated: dict | None = None,
+    ) -> models.Simulation:
+        calculated = calculated or {}
         db_simulation = models.Simulation(
             user_id=user_id,
             property_value=data.property_value,
@@ -15,6 +21,7 @@ class SimulationRepository:
             property_address=data.property_address,
             property_type=data.property_type,
             notes=data.notes,
+            **calculated,
         )
         db.add(db_simulation)
         db.commit()
@@ -45,13 +52,8 @@ class SimulationRepository:
         return sim
 
     @staticmethod
-    def update(
-        db: Session,
-        sim: models.Simulation,
-        data: schemas.SimulationUpdate,
-    ) -> models.Simulation:
-        update_data = data.dict(exclude_unset=True)
-        for field, value in update_data.items():
+    def update(db: Session, sim: models.Simulation, updates: dict) -> models.Simulation:
+        for field, value in updates.items():
             setattr(sim, field, value)
         db.commit()
         db.refresh(sim)
