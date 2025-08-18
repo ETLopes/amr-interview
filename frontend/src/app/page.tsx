@@ -1,103 +1,103 @@
-import Image from "next/image";
+"use client";
+
+import Link from "next/link";
+import { useState } from "react";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { calculate, type SimulationInput } from "@/lib/simulations";
+import { isAuthenticated } from "@/lib/auth";
+
+const quickSchema = z.object({
+  property_value: z.coerce.number().positive(),
+  down_payment_percentage: z.coerce.number().min(0).max(100),
+  contract_years: z.coerce.number().min(1).max(30),
+});
+
+type QuickValues = z.infer<typeof quickSchema>;
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const authed = isAuthenticated();
+  const [result, setResult] = useState<{
+    down_payment_amount: number;
+    financing_amount: number;
+    total_to_save: number;
+    monthly_savings: number;
+  } | null>(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm({
+    resolver: zodResolver(quickSchema),
+    defaultValues: { contract_years: 30, down_payment_percentage: 20 },
+  });
+
+  async function onQuickSubmit(values: QuickValues) {
+    setResult(null);
+    const res = await calculate(values as SimulationInput);
+    setResult(res.calculated_values);
+  }
+
+  return (
+    <div className="mx-auto max-w-5xl p-6 sm:p-10 space-y-10">
+      <header className="space-y-2">
+        <h1 className="text-3xl font-semibold">aMORA Real Estate Simulator</h1>
+        <p className="text-gray-600">Plan your property purchase with clarity: estimate down payment, financing, and monthly savings.</p>
+      </header>
+
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="rounded border p-5 space-y-3">
+          <h2 className="text-xl font-medium">Get Started</h2>
+          {authed ? (
+            <div className="flex flex-wrap gap-2">
+              <Link href="/dashboard" className="px-4 py-2 rounded bg-black text-white">Dashboard</Link>
+              <Link href="/simulations/new" className="px-4 py-2 rounded border">New Simulation</Link>
+              <Link href="/simulations" className="px-4 py-2 rounded border">Your Simulations</Link>
+              <Link href="/simulations/stats" className="px-4 py-2 rounded border">Statistics</Link>
+              <Link href="/profile" className="px-4 py-2 rounded border">Profile</Link>
+            </div>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              <Link href="/auth/login" className="px-4 py-2 rounded bg-black text-white">Login</Link>
+              <Link href="/auth/register" className="px-4 py-2 rounded border">Create Account</Link>
+            </div>
+          )}
+          <p className="text-sm text-gray-600">You can also try a quick calculation without signing in.</p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        <div className="rounded border p-5 space-y-3">
+          <h2 className="text-xl font-medium">Quick Calculation</h2>
+          <form onSubmit={handleSubmit(onQuickSubmit)} className="space-y-3">
+            <div>
+              <label className="block text-sm mb-1">Property value</label>
+              <input type="number" step="0.01" className="w-full border rounded px-3 py-2" {...register("property_value")} />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-sm mb-1">Down payment %</label>
+                <input type="number" step="0.01" className="w-full border rounded px-3 py-2" {...register("down_payment_percentage")} />
+              </div>
+              <div>
+                <label className="block text-sm mb-1">Years</label>
+                <input type="number" className="w-full border rounded px-3 py-2" {...register("contract_years")} />
+              </div>
+            </div>
+            <button disabled={isSubmitting} className="px-4 py-2 rounded bg-black text-white">
+              {isSubmitting ? "Calculating..." : "Calculate"}
+            </button>
+          </form>
+          {result && (
+            <ul className="text-sm space-y-1 rounded border p-3">
+              <li>Down payment amount: ${result.down_payment_amount.toLocaleString()}</li>
+              <li>Financing amount: ${result.financing_amount.toLocaleString()}</li>
+              <li>Total to save: ${result.total_to_save.toLocaleString()}</li>
+              <li>Monthly savings: ${result.monthly_savings.toLocaleString()}</li>
+            </ul>
+          )}
+        </div>
+      </section>
     </div>
   );
 }

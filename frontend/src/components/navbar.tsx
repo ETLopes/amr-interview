@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { isAuthenticated, logout } from "@/lib/auth";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import { useAuth } from "@/context/auth-context";
 
 export default function Navbar() {
   const router = useRouter();
-  const authed = isAuthenticated();
+  const pathname = usePathname();
+  const { user, logout } = useAuth();
+  const authed = !!user;
   return (
     <nav className="w-full border-b bg-white/50 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <div className="mx-auto max-w-5xl flex items-center justify-between p-3">
@@ -14,10 +16,11 @@ export default function Navbar() {
         <div className="flex items-center gap-4 text-sm">
           {authed ? (
             <>
-              <Link href="/dashboard">Dashboard</Link>
-              <Link href="/simulations">Simulations</Link>
-              <Link href="/simulations/new">New</Link>
-              <Link href="/profile">Profile</Link>
+              <Link href="/dashboard" className={pathname === "/dashboard" ? "underline" : ""}>Dashboard</Link>
+              <Link href="/simulations" className={pathname?.startsWith("/simulations") ? "underline" : ""}>Simulations</Link>
+              <Link href="/simulations/new" className={pathname === "/simulations/new" ? "underline" : ""}>New</Link>
+              <Link href="/simulations/stats" className={pathname === "/simulations/stats" ? "underline" : ""}>Stats</Link>
+              <Link href="/profile" className={pathname === "/profile" ? "underline" : ""}>Profile</Link>
               <button
                 className="underline"
                 onClick={() => {

@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # --- Base ---
-FROM node:20-alpine AS base
+FROM node:20-bullseye AS base
 WORKDIR /app
 ENV NODE_ENV=production
 
@@ -9,7 +9,7 @@ ENV NODE_ENV=production
 FROM base AS deps
 ENV NODE_ENV=development
 COPY package.json package-lock.json* .npmrc* ./
-RUN npm ci || npm install
+RUN npm ci --no-audit --no-fund || npm install --no-audit --no-fund
 
 # --- Builder ---
 FROM base AS builder

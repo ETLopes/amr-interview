@@ -52,9 +52,7 @@ services:
 
   # Next.js Frontend
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: node:20
     container_name: amora_frontend
     environment:
       - NEXT_PUBLIC_API_BASE_URL=http://backend:8000
@@ -67,9 +65,10 @@ services:
       - amora_network
     volumes:
       - ./frontend:/app
-      - /app/node_modules
+      - node_modules_frontend:/app/node_modules
+    working_dir: /app
     command: >
-      sh -c "npm install && npm run dev"
+      sh -c "npm ci --no-audit --no-fund && ./node_modules/.bin/next dev -H 0.0.0.0 -p 3000"
     restart: unless-stopped
 
   # pgAdmin (optional - for database management)
@@ -92,6 +91,7 @@ services:
 volumes:
   postgres_data:
   pgadmin_data:
+  node_modules_frontend:
 
 networks:
   amora_network:

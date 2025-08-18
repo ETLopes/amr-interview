@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { me, CurrentUser } from "@/lib/auth";
 import RequireAuth from "@/components/require-auth";
+import CreditScoreCard from "@/components/CreditScoreCard";
+import PropertyImporter from "@/components/PropertyImporter";
 import Link from "next/link";
 
 export default function DashboardPage() {
@@ -39,8 +41,12 @@ export default function DashboardPage() {
 
   return (
     <RequireAuth>
-      <div className="mx-auto max-w-2xl p-6 space-y-4">
+      <div className="mx-auto max-w-5xl p-6 space-y-6">
         <h1 className="text-2xl font-semibold">Dashboard</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <CreditScoreCard />
+          <PropertyImporter />
+        </div>
         <div className="rounded border p-4">
           <h2 className="font-medium">Current user</h2>
           <pre className="text-sm whitespace-pre-wrap">{JSON.stringify(user, null, 2)}</pre>

@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { login, me } from "@/lib/auth";
+import { useAuth } from "@/context/auth-context";
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -17,6 +17,7 @@ type FormValues = z.infer<typeof schema>;
 
 export default function LoginPage() {
   const router = useRouter();
+  const { login } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const {
     register: f,
@@ -27,8 +28,7 @@ export default function LoginPage() {
   const onSubmit = async (values: FormValues) => {
     setError(null);
     try {
-      await login({ username: values.email, password: values.password });
-      await me();
+      await login(values.email, values.password);
       router.push("/dashboard");
     } catch (e: unknown) {
       const err = e as { detail?: string; message?: string };
