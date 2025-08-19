@@ -63,7 +63,6 @@ O Simulador Imobiliário aMORA é uma ferramenta estratégica projetada para aju
 - **Containerização**: Docker & Docker Compose
 - **Banco de Dados**: PostgreSQL 15 com armazenamento persistente
 - **Desenvolvimento**: Hot reload e ferramentas de desenvolvimento
-- **Pronto para Produção**: Arquitetura escalável
 
 ## 📊 Análise de Negócios e Decisões Estratégicas
 
