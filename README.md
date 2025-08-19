@@ -54,7 +54,7 @@ O Simulador Imobiliário aMORA é uma ferramenta estratégica projetada para aju
 - **Migrações**: Alembic para gerenciamento de esquema
 - **Testes**: Pytest com cobertura abrangente
 
-### Frontend (Em breve)
+### Frontend
 - **Framework**: React/Next.js
 - **Estilização**: CSS moderno com design responsivo
 - **Gerenciamento de Estado**: Hooks e Context API
