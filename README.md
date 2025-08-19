@@ -56,9 +56,8 @@ O Simulador Imobiliário aMORA é uma ferramenta estratégica projetada para aju
 
 ### Frontend
 - **Framework**: React/Next.js
-- **Estilização**: CSS moderno com design responsivo
 - **Gerenciamento de Estado**: Hooks e Context API
-- **Componentes de UI**: Biblioteca de componentes customizada
+- **Componentes de UI**: Radix UI e Tailwind CSS
 
 ### Infraestrutura
 - **Containerização**: Docker & Docker Compose
