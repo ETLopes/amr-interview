@@ -45,12 +45,6 @@ O Simulador Imobiliário aMORA é uma ferramenta estratégica projetada para aju
 - **Atualizações em Tempo Real**: Cálculos instantâneos com atualização dinâmica do formulário
 - **Design Responsivo**: Abordagem mobile-first para todos os dispositivos
 
-### Inteligência de Negócios
-- **Analytics de Usuário**: Acompanhe engajamento e padrões de uso
-- **Estatísticas de Simulação**: Dados agregados para insights de negócio
-- **Exportação**: Download de relatórios de simulação
-- **Métricas de Performance**: Monitore uso do sistema e comportamento do usuário
-
 ## 🛠️ Pilha de Tecnologia
 
 ### Backend
